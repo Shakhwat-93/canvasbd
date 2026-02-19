@@ -1,0 +1,15 @@
+/* Custom Branding Styles */
+.brand-logo-text {
+    font-family: 'Instrument Serif', serif;
+    font-size: 32px;
+    color: #fff;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+    line-height: 1;
+}
+
+.brand-logo-wrap {
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}

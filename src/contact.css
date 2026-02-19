@@ -1,0 +1,381 @@
+/* ═══════════════════════════════════════════════════════════
+   Canvas Bd — Contact Page Styles
+   Standalone sections — no dependency on .cta or .feature
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Shared Section Base ── */
+.contact-section {
+    padding: 100px 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-section-inner {
+    position: relative;
+    z-index: 2;
+}
+
+.contact-section-header {
+    text-align: center;
+    margin-bottom: 56px;
+}
+
+.contact-section-title {
+    color: #fff;
+    font-family: 'Instrument Serif', serif;
+    font-size: 42px;
+    font-weight: 400;
+    line-height: 1.2;
+    margin: 0 0 16px;
+}
+
+.contact-section-text {
+    color: rgba(255, 255, 255, 0.55);
+    font-family: 'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+/* ── Contact Info Grid ── */
+.contact-info-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.contact-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 40px 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 20px;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        border-color 0.4s ease;
+}
+
+.contact-card:hover {
+    transform: translate3d(0, -6px, 0);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border-color: rgba(99, 102, 241, 0.25);
+}
+
+.contact-card-icon-wrap {
+    width: 64px;
+    height: 64px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(99, 102, 241, 0.05));
+    border: 1px solid rgba(99, 102, 241, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #818cf8;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.contact-card:hover .contact-card-icon-wrap {
+    transform: scale(1.1);
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.25), rgba(99, 102, 241, 0.1));
+}
+
+.contact-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contact-card-title {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.contact-card-link {
+    color: rgba(255, 255, 255, 0.65);
+    text-decoration: none;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    transition: color 0.3s ease;
+    line-height: 1.6;
+}
+
+.contact-card-link:hover {
+    color: #818cf8;
+}
+
+/* ── Location Cards ── */
+.contact-locations-section {
+    position: relative;
+}
+
+.contact-locations-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+.contact-location-card {
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 40px 32px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        border-color 0.4s ease;
+}
+
+.contact-location-card:hover {
+    transform: translate3d(0, -6px, 0);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border-color: rgba(99, 102, 241, 0.25);
+}
+
+.contact-location-badge {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: linear-gradient(135deg, rgba(99, 102, 241, 0.2), rgba(99, 102, 241, 0.08));
+    color: #818cf8;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-family: 'Inter', sans-serif;
+    border: 1px solid rgba(99, 102, 241, 0.15);
+}
+
+.factory-badge {
+    background: linear-gradient(135deg, rgba(251, 146, 60, 0.2), rgba(251, 146, 60, 0.08));
+    color: #fb923c;
+    border-color: rgba(251, 146, 60, 0.15);
+}
+
+.contact-location-icon {
+    width: 56px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #818cf8;
+    transition: transform 0.3s ease;
+}
+
+.contact-location-card:hover .contact-location-icon {
+    transform: scale(1.15) translateY(-3px);
+}
+
+.factory-icon {
+    color: #fb923c;
+}
+
+.contact-location-name {
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+.contact-location-address {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 14px;
+    line-height: 1.7;
+    margin: 0;
+    font-family: 'Inter', sans-serif;
+}
+
+/* ── Contact Form Section ── */
+.contact-form-section {
+    padding: 80px 0 120px;
+    position: relative;
+    overflow: hidden;
+}
+
+.contact-form-bg-decor {
+    position: absolute;
+    right: -200px;
+    top: -100px;
+    width: 500px;
+    opacity: 0.15;
+    pointer-events: none;
+}
+
+.contact-form-card {
+    max-width: 720px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    padding: 56px 48px;
+    position: relative;
+    z-index: 2;
+}
+
+.contact-form-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.contact-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+}
+
+.contact-form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.contact-label {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-family: 'Inter', sans-serif;
+    margin-bottom: 0;
+    display: block;
+}
+
+.contact-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    color: #fff;
+    padding: 14px 18px;
+    font-size: 15px;
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease, background 0.3s ease;
+}
+
+.contact-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
+}
+
+.contact-input:focus {
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    background: rgba(255, 255, 255, 0.07);
+}
+
+.contact-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.4)' stroke-width='2'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    background-size: 16px;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+.contact-select option {
+    background: #1a1a2e;
+    color: #fff;
+}
+
+.contact-textarea {
+    resize: vertical;
+    min-height: 130px;
+}
+
+.contact-submit-btn {
+    align-self: flex-start;
+    margin-top: 8px;
+    cursor: pointer;
+    border: none;
+    outline: none;
+}
+
+/* ── Responsive ── */
+@media screen and (max-width: 991px) {
+    .contact-section {
+        padding: 72px 0;
+    }
+
+    .contact-section-title {
+        font-size: 34px;
+    }
+
+    .contact-info-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .contact-locations-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .contact-form-card {
+        padding: 40px 32px;
+    }
+
+    .contact-form-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media screen and (max-width: 767px) {
+    .contact-section {
+        padding: 56px 0;
+    }
+
+    .contact-section-title {
+        font-size: 28px;
+    }
+
+    .contact-section-header {
+        margin-bottom: 40px;
+    }
+
+    .contact-card {
+        padding: 28px 24px;
+    }
+
+    .contact-location-card {
+        padding: 28px 24px;
+    }
+
+    .contact-form-section {
+        padding: 56px 0 80px;
+    }
+
+    .contact-form-card {
+        padding: 32px 20px;
+        border-radius: 16px;
+    }
+
+    .contact-submit-btn {
+        align-self: stretch;
+        justify-content: center;
+    }
+}

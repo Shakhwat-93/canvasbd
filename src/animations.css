@@ -1,0 +1,521 @@
+/* ═══════════════════════════════════════════════════════════
+   Canvas Bd — Animation System
+   All scroll-reveal, hover, and continuous animations
+   ═══════════════════════════════════════════════════════════ */
+
+/* ── Scroll Reveal ── */
+[data-animate] {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+    transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    will-change: opacity, transform;
+}
+
+[data-animate].is-revealed {
+    opacity: 1 !important;
+    transform: translate3d(0, 0, 0) !important;
+}
+
+/* Stagger delays for grouped items */
+[data-animate-delay="100"] {
+    transition-delay: 100ms;
+}
+
+[data-animate-delay="200"] {
+    transition-delay: 200ms;
+}
+
+[data-animate-delay="300"] {
+    transition-delay: 300ms;
+}
+
+[data-animate-delay="400"] {
+    transition-delay: 400ms;
+}
+
+[data-animate-delay="500"] {
+    transition-delay: 500ms;
+}
+
+[data-animate-delay="600"] {
+    transition-delay: 600ms;
+}
+
+/* ── Ticker / Marquee Animation ── */
+@keyframes ticker-scroll {
+    0% {
+        transform: translate3d(0%, 0, 0);
+    }
+
+    100% {
+        transform: translate3d(-100%, 0, 0);
+    }
+}
+
+.ticker-single-wrap {
+    animation: ticker-scroll 25s linear infinite;
+}
+
+.ticker-inner-wrapper:hover .ticker-single-wrap {
+    animation-play-state: paused;
+}
+
+/* ── Hero Badge Float Animations ── */
+@keyframes badge-float-one {
+
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+
+    25% {
+        transform: translate3d(5px, -10px, 0) rotate(2deg);
+    }
+
+    50% {
+        transform: translate3d(-3px, -15px, 0) rotate(-1deg);
+    }
+
+    75% {
+        transform: translate3d(3px, -8px, 0) rotate(1.5deg);
+    }
+}
+
+@keyframes badge-float-two {
+
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) rotate(0deg);
+    }
+
+    25% {
+        transform: translate3d(-5px, -8px, 0) rotate(-2deg);
+    }
+
+    50% {
+        transform: translate3d(4px, -14px, 0) rotate(1.5deg);
+    }
+
+    75% {
+        transform: translate3d(-2px, -6px, 0) rotate(-1deg);
+    }
+}
+
+.badge-one-wrapper {
+    animation: badge-float-one 6s ease-in-out infinite;
+}
+
+.badge-two-wrapper {
+    animation: badge-float-two 7s ease-in-out infinite;
+}
+
+/* ── Primary Button Hover Effects ── */
+.primary-button {
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.primary-button:hover {
+    transform: translate3d(0, -2px, 0);
+    box-shadow: 0 8px 25px rgba(99, 102, 241, 0.3);
+}
+
+.primary-button-icon {
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.primary-button:hover .primary-button-icon {
+    transform: translate3d(5px, 0, 0);
+    opacity: 0;
+}
+
+.primary-button-icon-hover {
+    position: absolute;
+    opacity: 0;
+    transform: translate3d(-10px, 0, 0);
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.primary-button:hover .primary-button-icon-hover {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+/* ── Secondary Button Hover ── */
+.secondary-button {
+    transition: transform 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.secondary-button:hover {
+    transform: translate3d(0, -2px, 0);
+}
+
+.secondary-button-icon {
+    transition: transform 0.3s ease;
+}
+
+.secondary-button:hover .secondary-button-icon {
+    transform: translate3d(4px, 0, 0);
+}
+
+/* ── Video Button Pulse ── */
+.video-button .play-icon-wrap {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.video-button:hover .play-icon-wrap {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px rgba(99, 102, 241, 0.4);
+}
+
+/* ── Feature Cards Hover Effects ── */
+.feature-card-one,
+.feature-card-two,
+.feature-card-three,
+.feature-card-four,
+.feature-card-five,
+.feature-card-six {
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.feature-card-one:hover,
+.feature-card-two:hover,
+.feature-card-three:hover,
+.feature-card-four:hover,
+.feature-card-five:hover,
+.feature-card-six:hover {
+    transform: translate3d(0, -6px, 0);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* Feature Card One — Icon Grid Rotation */
+.feature-card-one-bg .feature-card-info-icon-wrap {
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.feature-card-one:hover .feature-card-info-icon-wrap.one {
+    transform: translate3d(3px, -3px, 0) rotate(5deg);
+}
+
+.feature-card-one:hover .feature-card-info-icon-wrap.two {
+    transform: translate3d(-3px, -3px, 0) rotate(-5deg);
+}
+
+.feature-card-one:hover .feature-card-info-icon-wrap.three {
+    transform: translate3d(3px, 3px, 0) rotate(-3deg);
+}
+
+.feature-card-one:hover .feature-card-info-icon-wrap.four {
+    transform: translate3d(-3px, 3px, 0) rotate(3deg);
+}
+
+/* Feature Card Three — Image Scale */
+.feature-card-three-image-wrap img {
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.feature-card-three:hover .feature-card-three-image-wrap img {
+    transform: scale(1.05);
+}
+
+/* Feature Card Six — Image Shift */
+.feature-card-six-image {
+    transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.feature-card-six:hover .feature-card-six-image {
+    transform: translate3d(5px, -5px, 0);
+}
+
+/* ── Pricing Cards Hover ── */
+.pricing-card {
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        border-color 0.4s ease;
+}
+
+.pricing-card:hover {
+    transform: translate3d(0, -6px, 0);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Testimonial Cards Hover ── */
+.testimonial-card-one,
+.testimonial-card-two {
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.testimonial-card-one:hover,
+.testimonial-card-two:hover {
+    transform: translate3d(0, -4px, 0);
+    box-shadow: 0 16px 48px rgba(0, 0, 0, 0.25);
+}
+
+.testimonial-user-image {
+    transition: transform 0.3s ease;
+}
+
+.testimonial-card-one:hover .testimonial-user-image,
+.testimonial-card-two:hover .testimonial-user-image {
+    transform: scale(1.08);
+}
+
+/* ── CTA Section Animations ── */
+.cta-image {
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.cta-wrapper:hover .cta-image {
+    transform: translate3d(0, -8px, 0) scale(1.02);
+}
+
+/* ── Nav Bar Scroll Effect ── */
+.nav-bar {
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease, box-shadow 0.3s ease;
+}
+
+.nav-bar.scrolled {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* ── Nav Links Hover ── */
+.nav-link {
+    position: relative;
+    transition: color 0.3s ease;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--brand-primary, #6366f1);
+    transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+/* ── Footer Items Stagger ── */
+.footer-single-item {
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* ── Ticker Logo Hover ── */
+.ticker-logo {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    opacity: 0.6;
+}
+
+.ticker-logo:hover {
+    opacity: 1;
+    transform: scale(1.1);
+}
+
+/* ── Tools Section Icons Hover ── */
+.tools-icon-wrap {
+    transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+        box-shadow 0.3s ease;
+}
+
+.tools-icon-wrap:hover {
+    transform: translate3d(0, -4px, 0);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* ── Blog Card Hover ── */
+.blog-single-card {
+    transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.blog-single-card:hover {
+    transform: translate3d(0, -6px, 0);
+}
+
+.blog-card-image {
+    transition: transform 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.blog-single-card:hover .blog-card-image {
+    transform: scale(1.05);
+}
+
+/* ── FAQ Dropdown Animation ── */
+.faq-dropdown-list {
+    overflow: hidden;
+    transition: height 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.faq-dropdown.is-open {
+    border-color: rgba(99, 102, 241, 0.4) !important;
+}
+
+.faq-dropdown.is-open .faq-qustion-arrow {
+    transform: rotateX(180deg) !important;
+    color: rgb(99, 102, 241) !important;
+}
+
+/* ── Smooth Page Transitions ── */
+.page-wrapper {
+    animation: page-fade-in 0.5s ease;
+}
+
+@keyframes page-fade-in {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* ── Hero Background Parallax-like subtle motion ── */
+@keyframes hero-bg-drift {
+
+    0%,
+    100% {
+        transform: translate3d(0, 0, 0) scale(1);
+    }
+
+    50% {
+        transform: translate3d(-5px, -5px, 0) scale(1.02);
+    }
+}
+
+.hero-bg {
+    animation: hero-bg-drift 12s ease-in-out infinite;
+}
+
+/* ── Inner Hero BG Subtle Pulse ── */
+@keyframes inner-bg-pulse-one {
+
+    0%,
+    100% {
+        opacity: 0.4;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.6;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes inner-bg-pulse-two {
+
+    0%,
+    100% {
+        opacity: 0.3;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.5;
+        transform: scale(1.03);
+    }
+}
+
+.inner-hero-bg-one {
+    animation: inner-bg-pulse-one 8s ease-in-out infinite;
+}
+
+.inner-hero-bg-two {
+    animation: inner-bg-pulse-two 10s ease-in-out infinite 1s;
+}
+
+/* ── Section Caption Badge Glow ── */
+@keyframes caption-glow {
+
+    0%,
+    100% {
+        box-shadow: 0 0 10px rgba(99, 102, 241, 0.1);
+    }
+
+    50% {
+        box-shadow: 0 0 20px rgba(99, 102, 241, 0.25);
+    }
+}
+
+.section-caption {
+    animation: caption-glow 3s ease-in-out infinite;
+}
+
+/* ── Pricing BG Decoration Drift ── */
+.pricing-left-top-bg,
+.pricing-left-bottom-bg {
+    animation: inner-bg-pulse-one 10s ease-in-out infinite;
+}
+
+/* ── Testimonial BG Decoration Drift ── */
+.testimonial-bg-one {
+    animation: inner-bg-pulse-one 12s ease-in-out infinite;
+}
+
+.testimonial-bg-two {
+    animation: inner-bg-pulse-two 14s ease-in-out infinite;
+}
+
+/* ── Check Icon Bounce ── */
+@keyframes check-pop {
+    0% {
+        transform: scale(0);
+        opacity: 0;
+    }
+
+    60% {
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+.pricing-card.is-revealed .chack-icon {
+    animation: check-pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.pricing-card.is-revealed .price-card-item-wrap:nth-child(1) .chack-icon {
+    animation-delay: 0.1s;
+}
+
+.pricing-card.is-revealed .price-card-item-wrap:nth-child(2) .chack-icon {
+    animation-delay: 0.2s;
+}
+
+.pricing-card.is-revealed .price-card-item-wrap:nth-child(3) .chack-icon {
+    animation-delay: 0.3s;
+}
+
+.pricing-card.is-revealed .price-card-item-wrap:nth-child(4) .chack-icon {
+    animation-delay: 0.4s;
+}
+
+.pricing-card.is-revealed .price-card-item-wrap:nth-child(5) .chack-icon {
+    animation-delay: 0.5s;
+}
+
+.pricing-card.is-revealed .price-card-item-wrap:nth-child(6) .chack-icon {
+    animation-delay: 0.6s;
+}
+
+/* ── Reduced Motion Support ── */
+@media (prefers-reduced-motion: reduce) {
+
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
