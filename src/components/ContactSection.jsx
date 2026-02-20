@@ -1,10 +1,54 @@
-import { companyDetails } from '../data/company';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { supabase } from '../lib/supabase';
 
 export default function ContactSection() {
     const sectionRef = useRef(null);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitStatus, setSubmitStatus] = useState(null); // 'success' or 'error'
+    const [companyData, setCompanyData] = useState(null);
+    const [servicesData, setServicesData] = useState([]);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+        setSubmitStatus(null);
+
+        const formData = new FormData(e.target);
+        const data = {
+            name: formData.get('name'),
+            phone: formData.get('phone'),
+            email: formData.get('email'),
+            service: formData.get('service'),
+            message: formData.get('message')
+        };
+
+        try {
+            const { error } = await supabase
+                .from('contacts')
+                .insert([data]);
+
+            if (error) throw error;
+
+            setSubmitStatus('success');
+            e.target.reset();
+        } catch (error) {
+            console.error('Error submitting form:', error);
+            setSubmitStatus('error');
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
 
     useEffect(() => {
+        async function loadData() {
+            const { data: cData } = await supabase.from('company_info').select('*').single();
+            if (cData) setCompanyData(cData);
+
+            const { data: sData } = await supabase.from('services').select('*').order('created_at', { ascending: true });
+            if (sData) setServicesData(sData);
+        }
+        loadData();
+
         const section = sectionRef.current;
         if (!section) return;
 
@@ -31,117 +75,6 @@ export default function ContactSection() {
 
     return (
         <div id="contact" ref={sectionRef}>
-            {/* Contact Details Section */}
-            <section className="contact-section">
-                <div className="container">
-                    <div className="contact-section-inner">
-                        <div data-animate className="contact-section-header">
-                            <h2 className="contact-section-title">Contact Information</h2>
-                            <p className="contact-section-text">Call us, email us, or visit our offices — we're here to help you every step of the way.</p>
-                        </div>
-
-                        <div className="contact-info-grid">
-                            {/* Phone Card */}
-                            <div data-animate data-animate-delay="100" className="contact-card">
-                                <div className="contact-card-icon-wrap">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z" />
-                                    </svg>
-                                </div>
-                                <div className="contact-card-content">
-                                    <h3 className="contact-card-title">Phone Numbers</h3>
-                                    <a href="tel:01626777744" className="contact-card-link">01626777744</a>
-                                    <a href="tel:01990081308" className="contact-card-link">01990-081308</a>
-                                </div>
-                            </div>
-
-                            {/* Email Card */}
-                            <div data-animate data-animate-delay="200" className="contact-card">
-                                <div className="contact-card-icon-wrap">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <rect width="20" height="16" x="2" y="4" rx="2" />
-                                        <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
-                                    </svg>
-                                </div>
-                                <div className="contact-card-content">
-                                    <h3 className="contact-card-title">Email</h3>
-                                    <a href="mailto:CANVASBAGBD@GMAIL.COM" className="contact-card-link">{companyDetails.email}</a>
-                                </div>
-                            </div>
-
-                            {/* Website Card */}
-                            <div data-animate data-animate-delay="300" className="contact-card">
-                                <div className="contact-card-icon-wrap">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                        <circle cx="12" cy="12" r="10" />
-                                        <path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" />
-                                        <path d="M2 12h20" />
-                                    </svg>
-                                </div>
-                                <div className="contact-card-content">
-                                    <h3 className="contact-card-title">Website</h3>
-                                    <a href="https://canvasbangladesh.com" target="_blank" rel="noopener noreferrer" className="contact-card-link">CANVASBANGLADESH.COM</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* Locations Section */}
-            <section className="contact-section contact-locations-section">
-                <img src="/images/68522b8a6a593cf00ba12c45_a78e81681a043478dc8025be08a9bdd2_Bg%2001.svg" loading="lazy" alt="" className="pricing-left-top-bg" />
-                <div className="container">
-                    <div className="contact-section-inner">
-                        <div data-animate className="contact-section-header">
-                            <h2 className="contact-section-title">Our Locations</h2>
-                            <p className="contact-section-text">Visit us at any of our offices or factory across Dhaka</p>
-                        </div>
-
-                        <div className="contact-locations-grid">
-                            {/* Pallabi Office */}
-                            <div data-animate data-animate-delay="100" className="contact-location-card">
-                                <div className="contact-location-badge">Office</div>
-                                <div className="contact-location-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                                        <circle cx="12" cy="10" r="3" />
-                                    </svg>
-                                </div>
-                                <h3 className="contact-location-name">{companyDetails.locations.pallabi.name}</h3>
-                                <p className="contact-location-address">{companyDetails.locations.pallabi.address}</p>
-                            </div>
-
-                            {/* Uttara Office */}
-                            <div data-animate data-animate-delay="250" className="contact-location-card">
-                                <div className="contact-location-badge">Office</div>
-                                <div className="contact-location-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                                        <circle cx="12" cy="10" r="3" />
-                                    </svg>
-                                </div>
-                                <h3 className="contact-location-name">{companyDetails.locations.uttara.name}</h3>
-                                <p className="contact-location-address">{companyDetails.locations.uttara.address}</p>
-                            </div>
-
-                            {/* Keraniganj Factory */}
-                            <div data-animate data-animate-delay="400" className="contact-location-card">
-                                <div className="contact-location-badge factory-badge">Factory</div>
-                                <div className="contact-location-icon factory-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M2 20a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8l-7 5V8l-7 5V4a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2Z" />
-                                        <path d="M17 18h1" /><path d="M12 18h1" /><path d="M7 18h1" />
-                                    </svg>
-                                </div>
-                                <h3 className="contact-location-name">{companyDetails.locations.factory.name}</h3>
-                                <p className="contact-location-address">{companyDetails.locations.factory.address}</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
             {/* Contact Form Section */}
             <section className="contact-form-section">
                 <img src="/images/68522b8afb7001f33ec58e39_c711a787cc42eb29e73062dc3ca82256_Bg%2002.svg" loading="lazy" alt="" className="contact-form-bg-decor" />
@@ -151,45 +84,53 @@ export default function ContactSection() {
                             <h2 className="contact-section-title">Send Us a Message</h2>
                             <p className="contact-section-text">Tell us about your project and we'll get back to you within 24 hours.</p>
                         </div>
-                        <form className="contact-form" onSubmit={(e) => { e.preventDefault(); alert('Thank you! We will contact you soon.'); }}>
+                        <form className="contact-form" onSubmit={handleSubmit}>
+                            {submitStatus === 'success' && (
+                                <div className="form-success-message" style={{ padding: '16px', background: 'rgba(52, 211, 153, 0.1)', color: '#34d399', borderRadius: '8px', marginBottom: '24px', textAlign: 'center' }}>
+                                    Thank you! Your message has been sent successfully. We will get back to you shortly.
+                                </div>
+                            )}
+                            {submitStatus === 'error' && (
+                                <div className="form-error-message" style={{ padding: '16px', background: 'rgba(248, 113, 113, 0.1)', color: '#f87171', borderRadius: '8px', marginBottom: '24px', textAlign: 'center' }}>
+                                    Oops! Something went wrong. Please try again or contact us directly.
+                                </div>
+                            )}
                             <div className="contact-form-row">
                                 <div className="contact-form-field">
                                     <label htmlFor="contact-name" className="contact-label">Full Name</label>
-                                    <input type="text" id="contact-name" name="name" className="contact-input" placeholder="Your full name" required />
+                                    <input type="text" id="contact-name" name="name" className="contact-input" placeholder="Your full name" required disabled={isSubmitting} />
                                 </div>
                                 <div className="contact-form-field">
                                     <label htmlFor="contact-phone" className="contact-label">Phone Number</label>
-                                    <input type="tel" id="contact-phone" name="phone" className="contact-input" placeholder="01XXXXXXXXX" required />
+                                    <input type="tel" id="contact-phone" name="phone" className="contact-input" placeholder="01XXXXXXXXX" required disabled={isSubmitting} />
                                 </div>
                             </div>
                             <div className="contact-form-field">
                                 <label htmlFor="contact-email" className="contact-label">Email Address</label>
-                                <input type="email" id="contact-email" name="email" className="contact-input" placeholder="you@example.com" required />
+                                <input type="email" id="contact-email" name="email" className="contact-input" placeholder="you@example.com" required disabled={isSubmitting} />
                             </div>
                             <div className="contact-form-field">
                                 <label htmlFor="contact-service" className="contact-label">Service Interested In</label>
-                                <select id="contact-service" name="service" className="contact-input contact-select">
+                                <select id="contact-service" name="service" className="contact-input contact-select" disabled={isSubmitting}>
                                     <option value="">Select a service</option>
-                                    <option value="video-production">Video Production</option>
-                                    <option value="photography">Product Photography</option>
-                                    <option value="digital-marketing">Digital Marketing & SEO</option>
-                                    <option value="social-media">Social Media Management</option>
-                                    <option value="website">Website Development</option>
-                                    <option value="personal-branding">Personal Branding</option>
-                                    <option value="subscription">Monthly Subscription Plan</option>
+                                    {servicesData.map(service => (
+                                        <option key={service.id} value={service.title}>{service.title}</option>
+                                    ))}
                                     <option value="other">Other</option>
                                 </select>
                             </div>
                             <div className="contact-form-field">
                                 <label htmlFor="contact-message" className="contact-label">Your Message</label>
-                                <textarea id="contact-message" name="message" className="contact-input contact-textarea" placeholder="Tell us about your project..." rows="5" required></textarea>
+                                <textarea id="contact-message" name="message" className="contact-input contact-textarea" placeholder="Tell us about your project..." rows="5" required disabled={isSubmitting}></textarea>
                             </div>
-                            <button type="submit" className="primary-button contact-submit-btn w-inline-block">
-                                <div className="primary-button-text">Send Message</div>
-                                <div className="primary-button-icon-wrap">
-                                    <img loading="lazy" src="/images/685249b05d9202c4d1d30580_chevron-right.svg" alt="" className="primary-button-icon" />
-                                    <img loading="lazy" src="/images/685249b05d9202c4d1d30580_chevron-right.svg" alt="" className="primary-button-icon-hover" />
-                                </div>
+                            <button type="submit" className="primary-button contact-submit-btn w-inline-block" disabled={isSubmitting} style={{ opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? 'not-allowed' : 'pointer' }}>
+                                <div className="primary-button-text">{isSubmitting ? 'Sending...' : 'Send Message'}</div>
+                                {!isSubmitting && (
+                                    <div className="primary-button-icon-wrap">
+                                        <img loading="lazy" src="/images/685249b05d9202c4d1d30580_chevron-right.svg" alt="" className="primary-button-icon" />
+                                        <img loading="lazy" src="/images/685249b05d9202c4d1d30580_chevron-right.svg" alt="" className="primary-button-icon-hover" />
+                                    </div>
+                                )}
                             </button>
                         </form>
                     </div>

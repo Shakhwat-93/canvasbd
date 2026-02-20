@@ -1,12 +1,20 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
-import { services } from '../data/services';
+import { useEffect, useRef, useState } from 'react';
+import { services as staticServices } from '../data/services'; // fallback for tiers
+import { supabase } from '../lib/supabase';
 
 export default function Services() {
     const sectionRef = useRef(null);
-    const generalTiers = services.general.tiers;
+    const [dbServices, setDbServices] = useState([]);
+    const generalTiers = staticServices.general.tiers;
 
     useEffect(() => {
+        async function fetchServices() {
+            const { data } = await supabase.from('services').select('*').order('created_at', { ascending: true });
+            if (data) setDbServices(data);
+        }
+        fetchServices();
+
         const section = sectionRef.current;
         if (!section) return;
 
@@ -182,14 +190,16 @@ export default function Services() {
                                 </div>
                                 <div className="pricing-card-right-wrapper">
                                     <div className="pricing-card-items-wrapper">
-                                        {services.oneTime.items.map((item, i) => (
-                                            <div key={i} className="price-card-item-wrap">
+                                        {dbServices.length > 0 ? dbServices.map((item, i) => (
+                                            <div key={item.id || i} className="price-card-item-wrap">
                                                 <div className="price-card-icon-wrap">
                                                     <img src="/images/68564e0eee1d2c58645b2923_check.svg" loading="lazy" alt="" className="chack-icon" />
                                                 </div>
-                                                <div className="price-item-text">{item.name} — {item.price}</div>
+                                                <div className="price-item-text">{item.title} — {item.description}</div>
                                             </div>
-                                        ))}
+                                        )) : (
+                                            <div className="text-gray-500 text-sm">Loading services...</div>
+                                        )}
                                     </div>
                                 </div>
                             </div>

@@ -1,10 +1,18 @@
 import { Link } from 'react-router-dom';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { supabase } from '../lib/supabase';
 
 export default function Footer() {
     const footerRef = useRef(null);
+    const [companyData, setCompanyData] = useState(null);
 
     useEffect(() => {
+        async function fetchCompanyData() {
+            const { data } = await supabase.from('company_info').select('*').single();
+            if (data) setCompanyData(data);
+        }
+        fetchCompanyData();
+
         const footer = footerRef.current;
         if (!footer) return;
 
@@ -52,61 +60,69 @@ export default function Footer() {
                     </div>
                     <div className="footer-bottom-wrapper">
                         <div className="footer-items-wrapper">
-                            <div data-animate data-animate-delay="100" className="footer-single-item">
+                            <div data-animate className="footer-single-item">
                                 <div className="footer-link-title-wrap">
-                                    <div className="foote-link-title">Navigation</div>
+                                    <div className="foote-link-title">Contact Info</div>
                                 </div>
                                 <div className="foote-links-wrap">
-                                    <a href="#top" className="footer-link">Home</a>
-                                    <a href="#about" className="footer-link">About</a>
-                                    <a href="#services" className="footer-link">Services</a>
-                                    <a href="#pricing" className="footer-link">Pricing</a>
-                                    <a href="#contact" className="footer-link">Contact</a>
+                                    {companyData && (
+                                        <>
+                                            <a href={`tel:${companyData.phone[0]}`} className="footer-link" style={{ display: 'block', marginBottom: '8px', whiteSpace: 'nowrap' }}>{companyData.phone[0]}</a>
+                                            {companyData.phone[1] && <a href={`tel:${companyData.phone[1]}`} className="footer-link" style={{ display: 'block', marginBottom: '8px', whiteSpace: 'nowrap' }}>{companyData.phone[1]}</a>}
+                                            <a href={`mailto:${companyData.email}`} className="footer-link" style={{ display: 'block', marginBottom: '8px', whiteSpace: 'nowrap' }}>{companyData.email}</a>
+                                        </>
+                                    )}
+                                </div>
+                            </div>
+                            <div data-animate data-animate-delay="100" className="footer-single-item">
+                                <div className="footer-link-title-wrap">
+                                    <div className="foote-link-title">Offices</div>
+                                </div>
+                                <div className="foote-links-wrap">
+                                    {companyData?.locations?.pallabi && (
+                                        <div className="footer-link" style={{ textAlign: 'right' }}>
+                                            <span style={{ color: '#fff', display: 'block', marginBottom: '4px' }}>{companyData.locations.pallabi.name}</span>
+                                            <span style={{ fontSize: '0.85em', opacity: 0.7, maxWidth: '250px', display: 'inline-block', lineHeight: 1.4 }}>{companyData.locations.pallabi.address}</span>
+                                        </div>
+                                    )}
+                                    {companyData?.locations?.uttara && (
+                                        <div className="footer-link" style={{ textAlign: 'right' }}>
+                                            <span style={{ color: '#fff', display: 'block', marginBottom: '4px' }}>{companyData.locations.uttara.name}</span>
+                                            <span style={{ fontSize: '0.85em', opacity: 0.7, maxWidth: '250px', display: 'inline-block', lineHeight: 1.4 }}>{companyData.locations.uttara.address}</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                             <div data-animate data-animate-delay="200" className="footer-single-item">
                                 <div className="footer-link-title-wrap">
-                                    <div className="foote-link-title">Services</div>
+                                    <div className="foote-link-title">Factory</div>
                                 </div>
                                 <div className="foote-links-wrap">
-                                    <a href="#services" className="footer-link">Video Production</a>
-                                    <a href="#services" className="footer-link">Photography</a>
-                                    <a href="#services" className="footer-link">Digital Marketing</a>
-                                    <a href="#services" className="footer-link">Personal Branding</a>
-                                </div>
-                            </div>
-                            <div data-animate data-animate-delay="300" className="footer-single-item">
-                                <div className="footer-link-title-wrap">
-                                    <div className="foote-link-title">Social Media</div>
-                                </div>
-                                <div className="social-icon-wrapper">
-                                    <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" className="social-icon-wrap w-inline-block">
-                                        <div className="social-icon"></div>
-                                        <div>Facebook</div>
-                                    </a>
-                                    <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" className="social-icon-wrap w-inline-block">
-                                        <div className="social-icon"></div>
-                                        <div>Instagram</div>
-                                    </a>
+                                    {companyData?.locations?.factory && (
+                                        <div className="footer-link" style={{ textAlign: 'right' }}>
+                                            <span style={{ color: '#fff', display: 'block', marginBottom: '4px' }}>{companyData.locations.factory.name}</span>
+                                            <span style={{ fontSize: '0.85em', opacity: 0.7, maxWidth: '250px', display: 'inline-block', lineHeight: 1.4 }}>{companyData.locations.factory.address}</span>
+                                        </div>
+                                    )}
                                 </div>
                             </div>
                         </div>
-                        <div data-animate data-animate-delay="400" className="foote-logo-wrapper">
+                        <div data-animate data-animate-delay="500" className="foote-logo-wrapper">
                             <div className="footer-logo-link">
-                                <div className="brand-logo-text">Canvas Bd</div>
+                                <img src="/images/br/logo.png" alt="Canvas Bd Logo" className="brand-logo-img" style={{ height: '100px', transform: 'scale(2.8)', objectFit: 'contain' }} />
                             </div>
                         </div>
-                        <div data-animate data-animate-delay="500" className="copyright-wrapper">
+                        <div data-animate data-animate-delay="600" className="copyright-wrapper">
                             <div className="copyright-left-wrap">
-                                <div className="copyright-text">Copyright©Canvas Bd. All rights reserved.<br /></div>
+                                <div className="copyright-text">Copyright©{companyData?.name || 'Canvas Bd'}. All rights reserved.<br /></div>
                             </div>
                             <div className="copyright-right-wrap">
-                                <div className="copyright-text">© Copyright {new Date().getFullYear()} | Canvas Bd | Premium Video Production & Digital Marketing</div>
+                                <div className="copyright-text">© Copyright {new Date().getFullYear()} | {companyData?.name || 'Canvas Bd'} | Premium Video Production & Digital Marketing</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </footer>
+        </footer >
     );
 }

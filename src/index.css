@@ -1,3 +1,6 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
 /* Minimal reset — the main styles are loaded from /public/css/style.css in index.html */
 
 html {
@@ -14,4 +17,63 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Footer Custom Layout for Contact & Locations */
+.footer-middle-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 48px;
+  padding: 60px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  margin-bottom: 60px;
+  margin-top: 40px;
+}
+
+.footer-info-column {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.footer-info-block {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.footer-info-label {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 600;
+}
+
+.footer-info-text {
+  font-size: 0.95rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.footer-info-link {
+  font-size: 0.95rem;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  display: inline-block;
+}
+
+.footer-info-link:hover {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer-info-title {
+  font-size: 1.25rem;
+  color: #fff;
+  font-weight: 500;
+  margin-bottom: 16px;
+  font-family: inherit;
 }

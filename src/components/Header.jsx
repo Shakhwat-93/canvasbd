@@ -28,7 +28,7 @@ export default function Header() {
             <div className="nav-container">
                 <div className="nav-wrapper">
                     <a href="#top" className="brand-logo-wrap w-nav-brand" onClick={(e) => scrollToSection(e, 'top')}>
-                        <div className="brand-logo-text">Canvas Bd</div>
+                        <img src="/images/br/logo.png" alt="Canvas Bd Logo" className="brand-logo-img" style={{ height: '86px', transform: 'scale(2.8)', objectFit: 'contain' }} />
                     </a>
                     <nav role="navigation" className="nav-menu w-nav-menu" style={isOpen ? { display: 'block' } : {}}>
                         <a href="#top" className="nav-link w-nav-link" onClick={(e) => scrollToSection(e, 'top')}>Home</a>
