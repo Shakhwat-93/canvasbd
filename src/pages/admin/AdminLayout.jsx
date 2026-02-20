@@ -15,8 +15,8 @@ export default function AdminLayout() {
 
     if (loading || !user) {
         return (
-            <div className="min-h-screen bg-[#111111] flex items-center justify-center">
-                <div className="text-orange-500 animate-pulse">Loading Workspace...</div>
+            <div className="min-h-screen bg-[#0b0e14] flex items-center justify-center">
+                <div className="w-12 h-12 border-4 border-cyan-500/30 border-t-cyan-500 rounded-full animate-spin"></div>
             </div>
         );
     }
@@ -34,61 +34,81 @@ export default function AdminLayout() {
     ];
 
     return (
-        <div className="flex h-screen bg-[#0a0a0a] text-gray-200 font-sans overflow-hidden">
+        <div className="flex h-screen bg-[#0b0e14] text-slate-300 font-sans overflow-hidden">
+            {/* Background ambient glows */}
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-cyan-500/10 blur-[120px] rounded-full pointer-events-none"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[30%] h-[30%] bg-blue-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+
             {/* Sidebar */}
-            <aside className="w-64 bg-[#111111] border-r border-[#1f1f1f] flex flex-col">
+            <aside className="w-64 bg-[#131825]/80 backdrop-blur-2xl border-r border-white/5 flex flex-col relative z-20 shadow-[4px_0_24px_rgba(0,0,0,0.2)]">
                 {/* Brand */}
-                <div className="h-20 flex items-center px-6 border-b border-[#1f1f1f]">
-                    <div className="flex items-center gap-3">
-                        <img src="/images/br/logo.png" alt="Canvas Logo" className="h-[70px] scale-150 object-contain" />
+                <div className="h-24 flex items-center justify-center px-6 border-b border-white/5">
+                    <div className="flex items-center justify-center w-full">
+                        <img src="/images/br/logo.png" alt="Canvas Logo" className="h-[60px] scale-150 object-contain drop-shadow-[0_0_15px_rgba(255,255,255,0.1)]" />
                     </div>
                 </div>
 
                 {/* Navigation */}
-                <nav className="flex-1 py-6 px-4 space-y-1">
+                <nav className="flex-1 py-8 px-4 space-y-2">
                     {navLinks.map((link) => (
                         <NavLink
                             key={link.to}
                             to={link.to}
                             end={link.end}
                             className={({ isActive }) =>
-                                `flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 ${isActive
-                                    ? 'bg-[#1a1a1a] text-white font-medium shadow-sm border border-[#2a2a2a]'
-                                    : 'text-gray-400 hover:text-white hover:bg-[#151515]'
+                                `flex items-center gap-4 px-4 py-3.5 rounded-2xl transition-all duration-300 relative group overflow-hidden ${isActive
+                                    ? 'text-cyan-400 font-medium'
+                                    : 'text-slate-400 hover:text-slate-100'
                                 }`
                             }
                         >
-                            <link.icon size={18} className="opacity-80" />
-                            <span>{link.label}</span>
+                            {({ isActive }) => (
+                                <>
+                                    {isActive && (
+                                        <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 to-transparent border border-cyan-500/20 rounded-2xl pointer-events-none"></div>
+                                    )}
+                                    <div className="relative z-10 flex items-center gap-4 w-full">
+                                        <div className={`p-1.5 rounded-xl transition-colors ${isActive ? 'bg-cyan-500/20 text-cyan-400' : 'bg-transparent text-slate-500 group-hover:text-slate-300'}`}>
+                                            <link.icon size={18} strokeWidth={isActive ? 2.5 : 2} />
+                                        </div>
+                                        <span className="text-[15px] tracking-wide">{link.label}</span>
+                                        {isActive && (
+                                            <div className="absolute right-2 w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]"></div>
+                                        )}
+                                    </div>
+                                </>
+                            )}
                         </NavLink>
                     ))}
                 </nav>
 
                 {/* Footer / Logout */}
-                <div className="p-4 border-t border-[#1f1f1f]">
-                    <div className="bg-[#1a1a1a] rounded-xl p-4 border border-[#2a2a2a] flex flex-col gap-3">
-                        <div className="flex items-center gap-2">
-                            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-gray-700 to-gray-500 flex items-center justify-center">
-                                <span className="text-xs font-bold text-white">A</span>
+                <div className="p-4 border-t border-white/5">
+                    <div className="bg-[#1a2133]/60 backdrop-blur-xl rounded-2xl p-4 border border-white/5 flex flex-col gap-4 shadow-inner">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 p-[2px] shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+                                <div className="w-full h-full rounded-full bg-[#131825] flex items-center justify-center">
+                                    <span className="text-sm font-bold text-cyan-400">A</span>
+                                </div>
                             </div>
                             <div className="flex-1 overflow-hidden">
-                                <p className="text-sm font-medium text-white truncate">{user.email}</p>
-                                <p className="text-xs text-gray-500">Administrator</p>
+                                <p className="text-sm font-semibold text-slate-200 truncate">{user.email}</p>
+                                <p className="text-[11px] text-cyan-500/80 uppercase tracking-wider font-medium mt-0.5">Systems Admin</p>
                             </div>
                         </div>
                         <button
                             onClick={handleLogout}
-                            className="flex items-center justify-center gap-2 w-full py-2 px-3 rounded-lg bg-[#222] hover:bg-red-500/10 text-gray-400 hover:text-red-500 border border-[#333] hover:border-red-500/20 transition-colors text-sm font-medium"
+                            className="flex items-center justify-center gap-2 w-full py-2.5 px-3 rounded-xl bg-slate-800/50 hover:bg-red-500/10 text-slate-400 hover:text-red-400 border border-white/5 hover:border-red-500/20 transition-all duration-300 text-sm font-medium group"
                         >
-                            <LogOut size={16} />
-                            Log Out
+                            <LogOut size={16} className="group-hover:-translate-x-1 transition-transform" />
+                            Secure Logout
                         </button>
                     </div>
                 </div>
             </aside>
 
             {/* Main Content Area */}
-            <main className="flex-1 flex flex-col h-full overflow-hidden relative">
+            <main className="flex-1 flex flex-col h-full overflow-y-auto relative z-10 custom-scrollbar">
                 <Outlet />
             </main>
         </div>
