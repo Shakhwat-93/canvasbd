@@ -55,13 +55,13 @@ export const services = {
         ]
     },
     oneTime: {
-        title: "One-Time Services Package",
+        title: "ONE-TIME SERVICES PACKAGE",
         items: [
-            { name: "WordPress Website (General)", price: "15,000 BDT", remarks: "Development only (Domain/Hosting excluded)" },
-            { name: "High-Quality Cinematic Video", price: "8,000 BDT", remarks: "1 Min duration, special edits & model included" },
-            { name: "Average Corporate/Product Video", price: "6,000 BDT", remarks: "Professional shoot with model" },
-            { name: "Motion Graphics Video", price: "5,000 BDT", remarks: "1 min Duration" },
-            { name: "Product Photography", price: "200 BDT / Photo", remarks: "Min. 10 products (includes retouching)" }
+            { name: "WordPress Website (General)", price: "15,000", remarks: "Development only (Domain/Hosting excluded)" },
+            { name: "High-Quality Cinematic Video", price: "8,000", remarks: "1 Min duration, special edits & model included" },
+            { name: "Average Corporate/Product Video", price: "6,000", remarks: "Professional shoot with model" },
+            { name: "Motion Graphics Video", price: "5,000", remarks: "40 Seconds duration" },
+            { name: "Product Photography", price: "200 / Photo", remarks: "Min. 10 products (includes retouching)" }
         ],
         notes: [
             "The shoot will be completed in one day.",
@@ -69,13 +69,13 @@ export const services = {
         ]
     },
     bulk: {
-        title: "Bulk Video Productions",
+        title: "BULK VIDEO PRODUCTION",
         items: [
-            { quantity: "2 Videos", priceModel: "5,500/ Unit", priceMotion: "7,500/ Unit" },
-            { quantity: "3-5 Videos", priceModel: "5,000 / Unit", priceMotion: "7,000/ Unit" },
-            { quantity: "6-8 Videos", priceModel: "4,500 / Unit", priceMotion: "6,500/ Unit" },
-            { quantity: "8-10 Videos", priceModel: "4,000 / Unit", priceMotion: "6,000/ Unit" },
-            { quantity: "10+ Videos", priceModel: "UPON DISCUSSION", priceMotion: "UPON DISCUSSION" }
+            { quantity: "2 VIDEOS", priceModel: "5,500/ Unit", priceMotion: "7,500/ Unit" },
+            { quantity: "3-5 VIDEOS", priceModel: "5,000 / Unit", priceMotion: "7,000/ Unit" },
+            { quantity: "6-8 VIDEOS", priceModel: "4,500 / Unit", priceMotion: "6,500/ Unit" },
+            { quantity: "8-10 VIDEOS", priceModel: "4,000 / Unit", priceMotion: "6,000/ Unit" },
+            { quantity: "10+ VIDEOS", priceModel: "UPON DISCUSSION", priceMotion: "UPON DISCUSSION" }
         ],
         notes: [
             "The shoot will be completed in one day.",

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { useEffect, useRef, useState } from 'react';
 import { services as staticServices } from '../data/services'; // fallback for tiers
 import { supabase } from '../lib/supabase';
+import PricingExtraTables from './PricingExtraTables';
 
 export default function Services() {
     const sectionRef = useRef(null);
@@ -171,40 +172,8 @@ export default function Services() {
                             </div>
                         </div>
 
-                        {/* One-Time Services */}
-                        <div data-animate data-animate-delay="550" className="pricing-card">
-                            <div className="pricing-card-content-grid-wrap">
-                                <div className="pricing-card-left-wrapper">
-                                    <div className="pricing-card-left-top-wrap">
-                                        <div className="pricing-card-caption">One-Time Services</div>
-                                        <p className="pricing-card-info-title">Need a single project? We offer standalone video, photography, and web development services at competitive rates.</p>
-                                    </div>
-                                    <div className="pricing-card-left-bottom-wrap">
-                                        <div className="price-card-button-wrap">
-                                            <a href="#contact" className="secondary-button w-inline-block">
-                                                <div>Get a Quote</div>
-                                                <div className="secondary-button-icon"></div>
-                                            </a>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div className="pricing-card-right-wrapper">
-                                    <div className="pricing-card-items-wrapper">
-                                        {dbServices.length > 0 ? dbServices.map((item, i) => (
-                                            <div key={item.id || i} className="price-card-item-wrap">
-                                                <div className="price-card-icon-wrap">
-                                                    <img src="/images/68564e0eee1d2c58645b2923_check.svg" loading="lazy" alt="" className="chack-icon" />
-                                                </div>
-                                                <div className="price-item-text">{item.title} — {item.description}</div>
-                                            </div>
-                                        )) : (
-                                            <div className="text-gray-500 text-sm">Loading services...</div>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                     </div>
+                    <PricingExtraTables />
                 </div>
             </div>
         </section>
