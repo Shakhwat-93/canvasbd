@@ -1,4 +1,60 @@
 import { useEffect, useRef } from 'react';
+import { Aperture, Camera, Share2, Star, TrendingUp, Monitor } from 'lucide-react';
+
+const AnimatedBadge = ({ Icon = Aperture, size = 160, primaryColor = '#b052ff', spinDuration = '30s', className = '' }) => (
+    <div
+        className={`relative flex items-center justify-center animate-spin ${className}`}
+        style={{ width: `${size}px`, height: `${size}px`, animationDuration: spinDuration, animationTimingFunction: 'linear' }}
+    >
+        <div className="absolute inset-0 border-[1.5px] border-dashed border-white/10 rounded-full" />
+        <div className="absolute inset-[10%] border-[1.5px] border-dotted border-white/[0.07] rounded-full animate-[spin_20s_linear_infinite_reverse]" />
+        <div className="absolute inset-[20%] rounded-full backdrop-blur-sm" />
+        <div className="absolute inset-[30%] rounded-full flex items-center justify-center animate-[spin_25s_linear_infinite_reverse]" style={{ boxShadow: `0 0 20px ${primaryColor}33` }}>
+            <Icon size={size * 0.22} style={{ color: primaryColor, opacity: 0.9 }} />
+        </div>
+        <div className="absolute inset-0 animate-[spin_15s_linear_infinite_reverse]">
+            <div className="w-1.5 h-1.5 rounded-full absolute top-[14%] left-[14%]" style={{ backgroundColor: primaryColor, opacity: 0.6, boxShadow: `0 0 8px ${primaryColor}66` }} />
+        </div>
+        <div className="absolute inset-[10%] animate-[spin_10s_linear_infinite]">
+            <div className="w-1 h-1 bg-white/40 rounded-full absolute -top-[2px] left-1/2 -translate-x-1/2 shadow-[0_0_6px_rgba(255,255,255,0.3)]" />
+        </div>
+    </div>
+);
+
+const ServiceCard = ({ title, description, icon: Icon, color, delay, span = "col-span-1" }) => (
+    <div
+        data-animate
+        data-animate-delay={delay}
+        className={`${span} group relative bg-white/[0.02] backdrop-blur-xl border border-white/5 rounded-[2rem] p-8 transition-all duration-500 hover:bg-white/[0.03] hover:border-white/10 hover:-translate-y-2 overflow-hidden`}
+    >
+        {/* Subtle glow effect on hover */}
+        <div
+            className="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[100px] opacity-0 group-hover:opacity-[0.05] transition-opacity duration-700"
+            style={{ backgroundColor: color }}
+        />
+
+        <div className="relative z-10 flex flex-col h-full">
+            <div className="flex items-center justify-between mb-8">
+                <div className="relative">
+                    <AnimatedBadge Icon={Icon} size={100} primaryColor={color} spinDuration="35s" />
+                </div>
+
+            </div>
+
+            <div className="mt-auto">
+                <h3 className="text-2xl font-bold text-white mb-3 tracking-tight transition-colors duration-300">
+                    {title}
+                </h3>
+                <p className="text-slate-400 leading-relaxed text-sm lg:text-base mb-6 opacity-80 group-hover:opacity-100 transition-opacity">
+                    {description}
+                </p>
+                <div
+                    className="h-1 w-12 rounded-full bg-white/10 transition-all duration-500 group-hover:w-full group-hover:bg-white/20"
+                />
+            </div>
+        </div>
+    </div>
+);
 
 export default function Features() {
     const sectionRef = useRef(null);
@@ -28,117 +84,68 @@ export default function Features() {
         return () => observer.disconnect();
     }, []);
 
+    const services = [
+        {
+            title: "Cinematic Video Production",
+            description: "High-end cinematic videos, corporate films, product showcases, and motion graphics crafted to captivate your audience.",
+            icon: Aperture,
+            color: "#a78bfa",
+            delay: "100"
+        },
+        {
+            title: "Product Photography",
+            description: "Professional product photography with retouching — perfect for e-commerce, catalogs, and social media content.",
+            icon: Camera,
+            color: "#a78bfa",
+            delay: "150"
+        },
+        {
+            title: "Digital Marketing & SEO",
+            description: "Strategic marketing, Google Business Profile optimization, on-page SEO, and full 360° branding solutions.",
+            icon: TrendingUp,
+            color: "#a78bfa",
+            delay: "200"
+        },
+        {
+            title: "Social Media Management",
+            description: "Complete social media post design, scheduling, and page management to keep your brand active and engaging.",
+            icon: Share2,
+            color: "#a78bfa",
+            delay: "250"
+        },
+        {
+            title: "Website Development",
+            description: "Standard WordPress sites and Pro sites with appointment systems — professionally built for your business.",
+            icon: Monitor,
+            color: "#a78bfa",
+            delay: "300"
+        },
+        {
+            title: "Personal Branding",
+            description: "Tailored branding for Doctors, Lawyers, and Business professionals — video content, photoshoots, and strategy.",
+            icon: Star,
+            color: "#a78bfa",
+            delay: "350"
+        }
+    ];
+
     return (
         <section className="feature" id="services" ref={sectionRef}>
             <div className="container">
                 <div className="feature-wrapper">
                     <div data-animate className="feature-top-wrapper">
                         <div className="feature-title-wrap">
-                            <h2 className="feature-title">Premium Video & Marketing<br />Services for Your Brand</h2>
+                            <h2 className="feature-title">Our Services</h2>
                         </div>
                         <div className="feature-text-wrap">
-                            <p className="feature-text">From cinematic video production to strategic digital marketing, Canvas Bd provides end-to-end creative solutions that elevate your brand and drive results.</p>
+                            <p className="feature-text">From cinematic storytelling to data-driven marketing, we provide end-to-end services designed to elevate your brand.</p>
                         </div>
                     </div>
-                    <div className="feature-card-grid-wrap feature-card-grid-one-wrap">
-                        {/* Card 1 - Video Production */}
-                        <div data-animate data-animate-delay="100" className="feature-card-one" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: '30px' }}>
-                            <div className="feature-card-one-bg">
-                                <div className="feature-card-info-icon-wrap one">
-                                    <img src="/images/685992b62a1f1cedb479ee27_Framework%20Item%20Icon%2003.svg" loading="lazy" alt="" className="feature-card-info-icon" />
-                                </div>
-                                <div className="feature-card-info-icon-wrap two">
-                                    <img src="/images/685992b851fadab082e751bd_Framework%20Item%20Icon%2006.svg" loading="lazy" alt="" className="feature-card-info-icon" />
-                                </div>
-                                <div className="feature-card-info-icon-wrap three">
-                                    <img src="/images/685992b612820c543c123a68_Framework%20Item%20Icon%2002.svg" loading="lazy" alt="" className="feature-card-info-icon" />
-                                </div>
-                                <div className="feature-card-info-icon-wrap four">
-                                    <img src="/images/685992b8d7938fc8765343f6_Framework%20Item%20Icon%2005.svg" loading="lazy" alt="" className="feature-card-info-icon" />
-                                </div>
-                            </div>
-                            <div className="feature-card-content-wrap">
-                                <div className="feature-card-title-wrap">
-                                    <h3 className="feature-card-title">Cinematic Video Production</h3>
-                                </div>
-                                <div className="feature-card-text-wrap">
-                                    <p className="feature-card-text">High-end cinematic videos, corporate films, product showcases, and motion graphics crafted to captivate your audience.</p>
-                                </div>
-                            </div>
-                        </div>
 
-                        {/* Card 2 - Product Photography */}
-                        <div data-animate data-animate-delay="200" className="feature-card-two" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: '30px' }}>
-                            <div className="feature-two-card-content-grid-wrap">
-                                <div className="feature-two-card-right-wrap">
-                                    <div className="feature-card-title-wrap">
-                                        <h3 className="feature-card-title">Product Photography</h3>
-                                    </div>
-                                    <div className="feature-card-text-wrap">
-                                        <p className="feature-card-text">Professional product photography with retouching — perfect for e-commerce, catalogs, and social media content.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <img src="/images/6854ead02876b66d7e7892d8_b1239eda2ddd58d4f2f3f1bb6eb4e0de_Card%20Bg.png" loading="lazy" alt="" className="feature-card-two-bg" />
-                        </div>
-
-                        {/* Card 3 - Digital Marketing */}
-                        <div data-animate data-animate-delay="300" className="feature-card-three" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: '30px' }}>
-                            <img src="/images/6853c7880d3515c51fd15907_Card%20Line%2001.png" loading="lazy" alt="" className="feature-card-three-line-one" />
-                            <img src="/images/6853c7880d3515c51fd15907_Card%20Line%2001.png" loading="lazy" alt="" className="feature-card-three-line-two" />
-                            <div className="feature-card-three-image-wrapper">
-                                <div className="feature-card-three-image-wrap">
-                                    <img src="/images/6854f3373ffea919f9bc5a06_Card%20Three%20Image.png" loading="lazy" alt="" />
-                                </div>
-                            </div>
-                            <div className="feature-card-content-wrap">
-                                <div className="feature-card-title-wrap">
-                                    <h3 className="feature-card-title">Digital Marketing & SEO</h3>
-                                </div>
-                                <div className="feature-card-text-wrap">
-                                    <p className="feature-card-text">Strategic Facebook marketing, Google Business Profile optimization, on-page SEO, and full 360° branding to grow your online presence.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Cards 4 & 5 */}
-                        <div data-animate data-animate-delay="400" className="feature-item-grid-wap">
-                            <div className="feature-card-four" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: '20px', height: '100%' }}>
-                                <img src="/images/6854f5f5774dd90859edb1a6_c3df40abdf51507a49eccea6ac2b9cff_Card%20Four%20Image.png" loading="lazy" alt="" className="card-four-image" />
-                                <div className="feature-card-content-wrap">
-                                    <div className="feature-card-title-wrap">
-                                        <h3 className="feature-card-title">Social Media Management</h3>
-                                    </div>
-                                    <div className="feature-card-text-wrap">
-                                        <p className="feature-card-text">Complete social media post design, scheduling, and Facebook page management to keep your brand active and engaging.</p>
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="feature-card-five" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: '20px', height: '100%' }}>
-                                <img src="/images/6854f80038029b62703782d3_694e577b6b0ededddbe2880e0c89e34a_Card%20Five%20Image.png" loading="lazy" alt="" className="card-five-image" />
-                                <div className="feature-card-five-content-wrap">
-                                    <div className="feature-card-title-wrap">
-                                        <h3 className="feature-card-title">Website Development</h3>
-                                    </div>
-                                    <div className="feature-card-text-wrap">
-                                        <p className="feature-card-text">Standard WordPress sites and Pro sites with appointment systems — professionally built for your business needs.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Card 6 - Personal Branding */}
-                        <div data-animate data-animate-delay="500" className="feature-card-six" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', gap: '30px', paddingBottom: '40px' }}>
-                            <div className="feature-card-six-content-wrap">
-                                <div className="feature-card-title-wrap">
-                                    <h3 className="feature-card-title">Personal Branding & Content Strategy</h3>
-                                </div>
-                                <div className="feature-card-text-wrap">
-                                    <p className="feature-card-text">Tailored branding packages for Doctors, Lawyers, and Business professionals — including video content, professional photoshoots, scripting, and full 360° branding solutions.</p>
-                                </div>
-                            </div>
-
-                        </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                        {services.map((service, index) => (
+                            <ServiceCard key={index} {...service} />
+                        ))}
                     </div>
                 </div>
             </div>

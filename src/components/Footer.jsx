@@ -114,10 +114,10 @@ export default function Footer() {
                         </div>
                         <div data-animate data-animate-delay="600" className="copyright-wrapper">
                             <div className="copyright-left-wrap">
-                                <div className="copyright-text">Copyright©{companyData?.name || 'Canvas Bd'}. All rights reserved.<br /></div>
+                                <div className="copyright-text">© {new Date().getFullYear()} {companyData?.name || 'Canvas Bd'}. All rights reserved.</div>
                             </div>
                             <div className="copyright-right-wrap">
-                                <div className="copyright-text">© Copyright {new Date().getFullYear()} | {companyData?.name || 'Canvas Bd'} | Premium Video Production & Digital Marketing</div>
+                                <div className="copyright-text">Premium Video Production & Digital Marketing</div>
                             </div>
                         </div>
                     </div>

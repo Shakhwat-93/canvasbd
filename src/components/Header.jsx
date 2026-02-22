@@ -26,9 +26,9 @@ export default function Header() {
     return (
         <div data-animation="default" data-collapse="medium" data-duration="400" role="banner" className={`nav-bar w-nav${scrolled ? ' scrolled' : ''}`}>
             <div className="nav-container">
-                <div className="nav-wrapper">
+                <div className="nav-wrapper !px-5 !py-3 md:!px-[60px] md:!py-[16px]">
                     <a href="#top" className="brand-logo-wrap w-nav-brand" onClick={(e) => scrollToSection(e, 'top')}>
-                        <img src="/images/br/logo.png" alt="Canvas Bd Logo" className="brand-logo-img" style={{ height: '86px', transform: 'scale(2.8)', objectFit: 'contain' }} />
+                        <img src="/images/br/logo.png" alt="Canvas Bd Logo" className="brand-logo-img object-contain h-[36px] md:h-[86px] scale-[2.5] md:scale-[2.8] origin-left md:origin-center" />
                     </a>
                     <nav role="navigation" className="nav-menu w-nav-menu" style={isOpen ? { display: 'block' } : {}}>
                         <a href="#top" className="nav-link w-nav-link" onClick={(e) => scrollToSection(e, 'top')}>Home</a>

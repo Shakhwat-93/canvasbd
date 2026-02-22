@@ -1,6 +1,44 @@
 import { Link } from 'react-router-dom';
 import { useEffect, useRef } from 'react';
+import { Aperture, Video } from 'lucide-react';
 import Header from './Header';
+
+const ServiceBadge = ({ Icon = Aperture, size = 290, primaryColor = '#b052ff', spinDuration = '30s' }) => (
+    <div
+        className="relative flex items-center justify-center animate-spin"
+        style={{ width: `${size}px`, height: `${size}px`, animationDuration: spinDuration, animationTimingFunction: 'linear' }}
+    >
+        {/* Outer Orbit */}
+        <div className={`absolute inset-0 border-[1.5px] border-dashed border-white/20 rounded-full`} />
+
+        {/* Mid Orbit */}
+        <div className="absolute inset-[10%] border-[1.5px] border-dotted border-white/15 rounded-full animate-[spin_20s_linear_infinite_reverse]" />
+
+        {/* Inner Orbit background */}
+        <div className="absolute inset-[20%] rounded-full backdrop-blur-sm" />
+
+        {/* Center glowing element */}
+        <div className="absolute inset-[30%] rounded-full flex items-center justify-center shadow-[0_0_40px_rgba(176,82,255,0.3)] animate-[spin_25s_linear_infinite_reverse]">
+            <Icon size={size * 0.16} className="animate-pulse" style={{ color: primaryColor }} />
+        </div>
+
+        {/* Orbit Dots */}
+        {/* Outer Dot */}
+        <div className="absolute inset-0 animate-[spin_15s_linear_infinite_reverse]">
+            <div className="w-3 h-3 rounded-full absolute top-[14%] left-[14%] shadow-[0_0_15px_currentColor]" style={{ backgroundColor: primaryColor, color: primaryColor }} />
+        </div>
+
+        {/* Mid Dot */}
+        <div className="absolute inset-[10%] animate-[spin_10s_linear_infinite]">
+            <div className="w-2.5 h-2.5 bg-white rounded-full absolute -top-[5px] left-1/2 -translate-x-1/2 shadow-[0_0_10px_white]" />
+        </div>
+
+        {/* Inner Decorator Dot */}
+        <div className="absolute inset-[20%] animate-[spin_8s_linear_infinite]">
+            <div className="w-1.5 h-1.5 bg-[#ff5df5] rounded-full absolute top-[50%] -right-[3px] shadow-[0_0_8px_#ff5df5]" />
+        </div>
+    </div>
+);
 
 export default function Hero() {
     const sectionRef = useRef(null);
@@ -78,11 +116,11 @@ export default function Hero() {
                         <img src="/images/68522b8afb7001f33ec58e39_c711a787cc42eb29e73062dc3ca82256_Bg%2002.svg" loading="lazy" alt="" className="inner-hero-bg-two" />
                     </div>
                     <div className="hero-badge-wrapper">
-                        <div className="badge-one-wrapper home-badge-one">
-                            <img src="/images/68593df403345d2c01813802_Hero%20Badge%20Image.png" loading="lazy" alt="" className="badge-one-image" />
+                        <div className="badge-one-wrapper home-badge-one hover:scale-105 transition-transform duration-500 cursor-pointer" style={{ width: '240px', height: '240px' }}>
+                            <ServiceBadge Icon={Aperture} size={240} primaryColor="#b052ff" spinDuration="40s" />
                         </div>
-                        <div className="badge-two-wrapper home-badge-two">
-                            <img src="/images/68593df40e0c07331d9eaefb_Hero%20Badge%20Image-1.png" loading="lazy" alt="" className="badge-two-image" />
+                        <div className="badge-two-wrapper home-badge-two hover:scale-105 transition-transform duration-500 cursor-pointer" style={{ width: '220px', height: '220px' }}>
+                            <ServiceBadge Icon={Video} size={220} primaryColor="#34d399" spinDuration="35s" />
                         </div>
                     </div>
                 </div>
