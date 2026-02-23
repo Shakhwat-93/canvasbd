@@ -1,5 +1,5 @@
 import React from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../lib/AuthContext';
 import {
     LayoutDashboard,
@@ -57,8 +57,8 @@ export default function AdminLayout() {
     ];
 
     const systemLinks = [
-        { to: "/admin/payments", icon: CreditCard, label: "Payments" },
-        { to: "/admin/shipping", icon: Truck, label: "Shipping" }
+        { to: "/admin/payments", icon: CreditCard, label: "Payments", disabled: true },
+        { to: "/admin/shipping", icon: Truck, label: "Shipping", disabled: true }
     ];
 
     return (
@@ -81,11 +81,10 @@ export default function AdminLayout() {
             `}>
                 {/* Brand */}
                 <div className="h-20 flex items-center justify-between px-8 shrink-0">
-                    <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#c068ff] to-[#ff5efb] flex items-center justify-center shadow-lg shadow-[#b052ff]/20">
-                            <span className="text-white font-bold text-lg leading-none">C</span>
-                        </div>
-                        <span className="text-white font-serif font-bold text-xl tracking-tight hidden sm:block">CANVASBD</span>
+                    <div className="flex items-center">
+                        <Link to="/" className="flex items-center transition-transform hover:scale-105 duration-300">
+                            <img src="/images/br/logo.png" alt="Canvas Bd Logo" className="object-contain h-8 md:h-10 w-auto origin-left scale-125 md:scale-150 ml-2" />
+                        </Link>
                     </div>
                     {/* Close button for mobile */}
                     <button
@@ -136,12 +135,17 @@ export default function AdminLayout() {
                             {systemLinks.map((link) => (
                                 <NavLink
                                     key={link.to}
-                                    to={link.to}
-                                    onClick={() => setIsMobileMenuOpen(false)}
+                                    to={link.disabled ? '#' : link.to}
+                                    onClick={(e) => {
+                                        if (link.disabled) e.preventDefault();
+                                        else setIsMobileMenuOpen(false);
+                                    }}
                                     className={({ isActive }) =>
-                                        `flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium ${isActive
-                                            ? 'bg-gradient-to-r from-[#2c1d38] to-transparent text-white'
-                                            : 'text-slate-400 hover:text-white hover:bg-white/[0.03]'
+                                        `flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium ${link.disabled
+                                            ? 'opacity-40 blur-[2px] pointer-events-none select-none'
+                                            : isActive
+                                                ? 'bg-gradient-to-r from-[#2c1d38] to-transparent text-white'
+                                                : 'text-slate-400 hover:text-white hover:bg-white/[0.03]'
                                         }`
                                     }
                                 >

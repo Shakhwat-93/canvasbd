@@ -34,12 +34,12 @@ export default function Header() {
                         <img
                             src="/images/br/logo.png"
                             alt="Canvas Bd Logo"
-                            className="object-contain h-10 md:h-12 w-auto scale-[1.3] md:scale-[2.6] origin-left"
+                            className="object-contain h-10 md:h-12 w-auto scale-[1.8] md:scale-[2.6] origin-left"
                         />
                     </a>
 
                     {/* Desktop Navigation */}
-                    <nav role="navigation" className="nav-menu hidden lg:flex items-center">
+                    <nav role="navigation" className="nav-menu !hidden lg:!flex items-center">
                         <a href="#top" className="nav-link w-nav-link" onClick={(e) => scrollToSection(e, 'top')}>Home</a>
                         <a href="#about" className="nav-link w-nav-link" onClick={(e) => scrollToSection(e, 'about')}>About</a>
                         <a href="#services" className="nav-link w-nav-link" onClick={(e) => scrollToSection(e, 'services')}>Services</a>

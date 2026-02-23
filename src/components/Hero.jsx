@@ -78,7 +78,7 @@ export default function Hero() {
             </div>
             <div className="container relative z-10 px-4 sm:px-6 lg:px-8 mx-auto">
                 <img src="/images/68591edebc6b6874a4c10327_Hero%20Bg.png" loading="lazy" alt="" className="hero-bg absolute inset-0 w-full h-full object-cover opacity-60 pointer-events-none" />
-                <div className="hero-wrapper relative pt-20 pb-16 md:pt-32 md:pb-24 flex flex-col items-center">
+                <div className="hero-wrapper relative pt-4 pb-16 md:pt-6 md:pb-24 flex flex-col items-center">
                     <div className="hero-content-wrapper w-full relative z-20">
                         <div className="hero-content-wrap flex flex-col items-center text-center">
                             <div className="section-caption-wrap mb-6 md:mb-8">
@@ -130,27 +130,27 @@ export default function Hero() {
             </div>
             <div data-animate data-animate-delay="800" className="ticker-wrap w-full mt-12 md:mt-16 overflow-hidden">
                 <div className="hero-ticker-title text-center text-xs md:text-sm text-slate-500 uppercase tracking-widest mb-6 px-4">Trusted by growing businesses across Bangladesh</div>
-                <div className="ticker-wrapper relative w-full overflow-hidden flex items-center py-6 border-y border-white/5 bg-[#0c0c0e]/40 backdrop-blur-sm">
+                <div className="ticker-wrapper relative w-full overflow-hidden whitespace-nowrap text-left py-6 border-y border-white/5 bg-[#0c0c0e]/40 backdrop-blur-sm">
                     {/* Gradient faders for smooth edges */}
-                    <div className="absolute left-0 top-0 bottom-0 w-12 md:w-32 bg-gradient-to-r from-[#0c0c0e] to-transparent z-10"></div>
-                    <div className="absolute right-0 top-0 bottom-0 w-12 md:w-32 bg-gradient-to-l from-[#0c0c0e] to-transparent z-10"></div>
+                    <div className="absolute left-0 top-0 bottom-0 w-12 md:w-32 bg-gradient-to-r from-[#0c0c0e] to-transparent z-10 pointer-events-none"></div>
+                    <div className="absolute right-0 top-0 bottom-0 w-12 md:w-32 bg-gradient-to-l from-[#0c0c0e] to-transparent z-10 pointer-events-none"></div>
 
-                    <div className="ticker-inner-wrapper flex animate-[scroll_40s_linear_infinite] whitespace-nowrap min-w-full">
-                        <div className="ticker-single-wrap flex flex-shrink-0 items-center justify-around gap-12 sm:gap-16 lg:gap-24 px-6 md:px-12 w-full lg:w-auto">
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#b052ff] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300 flex-shrink-0 cursor-default">BENGAL</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#34d399] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300 flex-shrink-0 cursor-default">NEXUS</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#ff5df5] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300 flex-shrink-0 cursor-default">DYNAMICS</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-white opacity-40 hover:opacity-100 transition-all duration-300 flex-shrink-0 cursor-default">ASIATIC</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#b052ff] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300 flex-shrink-0 cursor-default">PADMA</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#34d399] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300 flex-shrink-0 cursor-default">CHARKA</div>
+                    <div className="inline-block animate-[scroll_40s_linear_infinite]">
+                        <div className="inline-flex items-center gap-12 sm:gap-16 lg:gap-24 pr-12 sm:pr-16 lg:pr-24 align-middle">
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#b052ff] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">BENGAL</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#34d399] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">NEXUS</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#ff5df5] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">DYNAMICS</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-white opacity-40 hover:opacity-100 transition-all duration-300">ASIATIC</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#b052ff] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">PADMA</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#34d399] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">CHARKA</div>
                         </div>
-                        <div className="ticker-single-wrap flex flex-shrink-0 items-center justify-around gap-12 sm:gap-16 lg:gap-24 px-6 md:px-12 w-full lg:w-auto">
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#b052ff] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300 flex-shrink-0 cursor-default">BENGAL</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#34d399] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300 flex-shrink-0 cursor-default">NEXUS</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#ff5df5] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300 flex-shrink-0 cursor-default">DYNAMICS</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-white opacity-40 hover:opacity-100 transition-all duration-300 flex-shrink-0 cursor-default">ASIATIC</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#b052ff] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300 flex-shrink-0 cursor-default">PADMA</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#34d399] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300 flex-shrink-0 cursor-default">CHARKA</div>
+                        <div className="inline-flex items-center gap-12 sm:gap-16 lg:gap-24 pr-12 sm:pr-16 lg:pr-24 align-middle">
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#b052ff] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">BENGAL</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#34d399] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">NEXUS</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#ff5df5] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">DYNAMICS</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-white opacity-40 hover:opacity-100 transition-all duration-300">ASIATIC</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#b052ff] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">PADMA</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#34d399] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">CHARKA</div>
                         </div>
                     </div>
                 </div>

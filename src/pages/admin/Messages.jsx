@@ -170,7 +170,7 @@ export default function Messages() {
                                         <tr key={msg.id} className="hover:bg-white/[0.01] transition-colors duration-200 group">
 
                                             {/* Name & Actions */}
-                                            <td className="px-2 py-6 align-top">
+                                            <td className="px-2 py-10 align-top">
                                                 <div className="flex flex-col gap-2 max-w-lg">
                                                     <div className="flex items-baseline justify-start gap-4">
                                                         <button onClick={() => setViewingMsg(msg)} className="font-medium text-slate-200 text-base hover:text-[#b052ff] transition-colors text-left group-hover:text-white">
@@ -187,7 +187,7 @@ export default function Messages() {
                                             </td>
 
                                             {/* Contact Details */}
-                                            <td className="px-6 py-6 align-top">
+                                            <td className="px-6 py-10 align-top">
                                                 <div className="flex flex-col gap-3 mt-1">
                                                     <a href={`mailto:${msg.email}`} className="flex items-center gap-3 text-slate-400 hover:text-white text-sm transition-colors group/link">
                                                         <Mail size={14} className="text-slate-600 group-hover/link:text-white transition-colors" />
@@ -201,14 +201,14 @@ export default function Messages() {
                                             </td>
 
                                             {/* Service Type */}
-                                            <td className="px-6 py-6 align-top">
+                                            <td className="px-6 py-10 align-top">
                                                 <span className="inline-flex items-center text-sm font-light text-slate-300 mt-1">
                                                     {msg.service.replace('-', ' ')}
                                                 </span>
                                             </td>
 
                                             {/* Live Status */}
-                                            <td className="px-6 py-6 align-top">
+                                            <td className="px-6 py-10 align-top">
                                                 <div className="relative inline-block w-36 mt-1">
                                                     <select
                                                         value={msg.status}
@@ -230,7 +230,7 @@ export default function Messages() {
                                             </td>
 
                                             {/* Actions */}
-                                            <td className="px-2 py-6 align-top text-right">
+                                            <td className="px-2 py-10 align-top text-right">
                                                 <button
                                                     onClick={() => triggerDeleteModal(msg.id)}
                                                     className="p-2 text-slate-600 hover:text-red-400 transition-colors opacity-0 group-hover:opacity-100 mt-1"

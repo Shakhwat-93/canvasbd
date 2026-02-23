@@ -39,7 +39,7 @@ export default function Footer() {
     }, []);
 
     return (
-        <footer className="footer bg-[#0a0a0c] pt-16 md:pt-24 pb-12 border-t border-white/5 relative overflow-hidden" ref={footerRef}>
+        <footer className="footer bg-[#0a0a0c] pt-16 md:pt-24 pb-24 md:pb-12 border-t border-white/5 relative overflow-hidden" ref={footerRef}>
             <div className="container px-4 sm:px-6 lg:px-8 mx-auto relative z-10 w-full">
                 <div className="footer-wrapper flex flex-col gap-12 md:gap-16 w-full">
                     {/* Top Call to Action */}
@@ -140,14 +140,13 @@ export default function Footer() {
 
                         <div data-animate data-animate-delay="300" className="w-full h-px bg-white/5 my-2"></div>
 
-                        {/* Bottom Footer block */}
-                        <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-0 w-full mb-4 md:mb-8 pb-4">
-                            <div data-animate data-animate-delay="400" className="mb-2 md:mb-0 ml-4 md:ml-8">
-                                <Link to="/" className="flex items-center justify-center md:justify-start">
-                                    <img src="/images/br/logo.png" alt="Canvas Bd Logo" className="object-contain h-10 md:h-12 w-auto scale-[1.5] md:scale-[2.6] origin-left" />
+                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 md:gap-0 w-full mb-4 md:mb-8 pb-4">
+                            <div data-animate data-animate-delay="400" className="mb-4 md:mb-0">
+                                <Link to="/" className="flex items-center justify-start">
+                                    <img src="/images/br/logo.png" alt="Canvas Bd Logo" className="object-contain h-24 sm:h-28 md:h-32 w-auto" />
                                 </Link>
                             </div>
-                            <div data-animate data-animate-delay="500" className="flex flex-col md:flex-row items-center justify-center md:justify-end gap-3 md:gap-4 text-center md:text-right w-full md:w-auto mt-4 md:mt-0">
+                            <div data-animate data-animate-delay="500" className="flex flex-col md:flex-row items-start md:items-center justify-start md:justify-end gap-3 md:gap-4 text-left md:text-right w-full md:w-auto mt-4 md:mt-0 pr-16 md:pr-0">
                                 <div className="text-sm text-slate-300 font-medium">© {new Date().getFullYear()} {companyData?.name || 'Canvas Bd'}. All rights reserved.</div>
                                 <div className="hidden md:block text-slate-600">|</div>
                                 <div className="text-xs sm:text-sm text-slate-400 font-medium tracking-wide">Premium Video Production & Digital Marketing</div>
