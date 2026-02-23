@@ -25,7 +25,7 @@ const ServiceCard = ({ title, description, icon: Icon, color, delay, span = "col
     <div
         data-animate
         data-animate-delay={delay}
-        className={`${span} group relative bg-white/[0.02] backdrop-blur-xl border border-white/5 rounded-[2rem] p-8 transition-all duration-500 hover:bg-white/[0.03] hover:border-white/10 hover:-translate-y-2 overflow-hidden`}
+        className={`${span} group relative bg-white/[0.02] backdrop-blur-xl border border-white/5 rounded-3xl p-6 md:p-8 transition-all duration-500 hover:bg-white/[0.03] hover:border-white/10 hover:-translate-y-2 overflow-hidden flex flex-col`}
     >
         {/* Subtle glow effect on hover */}
         <div
@@ -33,19 +33,18 @@ const ServiceCard = ({ title, description, icon: Icon, color, delay, span = "col
             style={{ backgroundColor: color }}
         />
 
-        <div className="relative z-10 flex flex-col h-full">
-            <div className="flex items-center justify-between mb-8">
-                <div className="relative">
-                    <AnimatedBadge Icon={Icon} size={100} primaryColor={color} spinDuration="35s" />
+        <div className="relative z-10 flex flex-col h-full flex-grow">
+            <div className="flex items-center justify-between mb-6 md:mb-8">
+                <div className="relative w-[80px] h-[80px] md:w-[100px] md:h-[100px] flex items-center justify-center">
+                    <AnimatedBadge Icon={Icon} size={100} primaryColor={color} spinDuration="35s" className="scale-[0.8] md:scale-100 origin-center" />
                 </div>
-
             </div>
 
-            <div className="mt-auto">
-                <h3 className="text-2xl font-bold text-white mb-3 tracking-tight transition-colors duration-300">
+            <div className="mt-auto flex-grow flex flex-col">
+                <h3 className="text-xl lg:text-2xl font-extrabold text-white mb-3 tracking-tight transition-colors duration-300" style={{ fontFamily: 'Inter, system-ui, sans-serif' }}>
                     {title}
                 </h3>
-                <p className="text-slate-400 leading-relaxed text-sm lg:text-base mb-6 opacity-80 group-hover:opacity-100 transition-opacity">
+                <p className="text-slate-300 leading-relaxed text-sm lg:text-base mb-6 group-hover:text-slate-200 transition-colors">
                     {description}
                 </p>
                 <div
@@ -130,15 +129,15 @@ export default function Features() {
     ];
 
     return (
-        <section className="feature" id="services" ref={sectionRef}>
-            <div className="container">
-                <div className="feature-wrapper">
-                    <div data-animate className="feature-top-wrapper">
-                        <div className="feature-title-wrap">
-                            <h2 className="feature-title">Our Services</h2>
+        <section className="feature py-16 md:py-24" id="services" ref={sectionRef}>
+            <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
+                <div className="feature-wrapper flex flex-col items-center">
+                    <div data-animate className="feature-top-wrapper text-center max-w-[800px] mx-auto mb-12 md:mb-16">
+                        <div className="feature-title-wrap mb-4 md:mb-6">
+                            <h2 className="feature-title text-3xl md:text-5xl lg:text-[56px] font-bold leading-tight">Our Services</h2>
                         </div>
-                        <div className="feature-text-wrap">
-                            <p className="feature-text">From cinematic storytelling to data-driven marketing, we provide end-to-end services designed to elevate your brand.</p>
+                        <div className="feature-text-wrap px-2 sm:px-0">
+                            <p className="feature-text text-base md:text-lg lg:text-xl text-slate-400 font-light leading-relaxed">From cinematic storytelling to data-driven marketing, we provide end-to-end services designed to elevate your brand.</p>
                         </div>
                     </div>
 

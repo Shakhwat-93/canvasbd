@@ -1,0 +1,26 @@
+import { createClient } from '@supabase/supabase-js';
+
+const supabaseUrl = 'https://ausrnwtbsboshajprwnh.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1c3Jud3Ric2Jvc2hhanByd25oIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1NzU3NTQsImV4cCI6MjA4NzE1MTc1NH0.mCArzgj5JZApIl4VfW94pI2mq79Kuua23nMDbh0dIg0';
+
+const supabase = createClient(supabaseUrl, supabaseKey);
+
+async function testRLS() {
+    const data = {
+        name: 'Shakhwat hossain rasel',
+        phone: '01540400247',
+        email: 'raselbhai01936@gmail.com',
+        service: 'Digital Marketing & SEO',
+        message: 'fdfdf'
+    };
+
+    const { data: insertData, error: insertError } = await supabase.from('contacts').insert([data]);
+
+    if (insertError) {
+        console.error("INSERT ERROR:", insertError);
+    } else {
+        console.log("INSERT SUCCESS:", insertData);
+    }
+}
+
+testRLS();

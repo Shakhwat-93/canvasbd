@@ -111,10 +111,11 @@ export default function VideoGallery() {
                 }
                 .vg-heading {
                     color: ${THEME.text};
-                    font-family: 'Instrument Serif', sans-serif;
+                    font-family: Inter, sans-serif;
                     font-size: 52px;
-                    font-weight: 400;
+                    font-weight: 800;
                     line-height: 60px;
+                    letter-spacing: -0.03em;
                     margin: 0 auto 20px;
                     max-width: 620px;
                 }
@@ -259,9 +260,9 @@ export default function VideoGallery() {
                 }
                 .vg-card-title {
                     color: ${THEME.text};
-                    font-family: 'Instrument Serif', sans-serif;
+                    font-family: Inter, sans-serif;
                     font-size: 17px;
-                    font-weight: 400;
+                    font-weight: 700;
                     line-height: 22px;
                     margin: 0 0 4px;
                     white-space: nowrap;
@@ -292,9 +293,9 @@ export default function VideoGallery() {
                 }
                 .vg-cta-title {
                     color: ${THEME.text};
-                    font-family: 'Instrument Serif', sans-serif;
+                    font-family: Inter, sans-serif;
                     font-size: 28px;
-                    font-weight: 400;
+                    font-weight: 700;
                     line-height: 34px;
                     margin: 0 0 8px;
                 }
@@ -329,9 +330,9 @@ export default function VideoGallery() {
                 }
                 .vg-modal-title {
                     color: ${THEME.text};
-                    font-family: 'Instrument Serif', sans-serif;
+                    font-family: Inter, sans-serif;
                     font-size: 22px;
-                    font-weight: 400;
+                    font-weight: 700;
                     margin: 0 0 4px;
                 }
                 .vg-modal-cat {
@@ -402,7 +403,7 @@ export default function VideoGallery() {
             `}</style>
 
             <section className="vg-section" id="portfolio" ref={sectionRef}>
-                <div className="container">
+                <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
 
                     {/* Header */}
                     <div data-animate className="vg-header">

@@ -1,0 +1,76 @@
+{
+  "hash": "f09f283a",
+  "configHash": "823bfb9b",
+  "lockfileHash": "d65dd275",
+  "browserHash": "17a26c2d",
+  "optimized": {
+    "react": {
+      "src": "../../node_modules/.pnpm/react@18.3.1/node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "ac5a378d",
+      "needsInterop": true
+    },
+    "react-dom": {
+      "src": "../../node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "6c502508",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "935099ca",
+      "needsInterop": true
+    },
+    "react/jsx-runtime": {
+      "src": "../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js",
+      "file": "react_jsx-runtime.js",
+      "fileHash": "d0717c2e",
+      "needsInterop": true
+    },
+    "@supabase/supabase-js": {
+      "src": "../../node_modules/.pnpm/@supabase+supabase-js@2.97.0/node_modules/@supabase/supabase-js/dist/index.mjs",
+      "file": "@supabase_supabase-js.js",
+      "fileHash": "c1fc3103",
+      "needsInterop": false
+    },
+    "framer-motion": {
+      "src": "../../node_modules/.pnpm/framer-motion@12.34.3_react_18d8a385f1deb410c446c2c1220ce95c/node_modules/framer-motion/dist/es/index.mjs",
+      "file": "framer-motion.js",
+      "fileHash": "9d044c63",
+      "needsInterop": false
+    },
+    "lucide-react": {
+      "src": "../../node_modules/.pnpm/lucide-react@0.574.0_react@18.3.1/node_modules/lucide-react/dist/esm/lucide-react.js",
+      "file": "lucide-react.js",
+      "fileHash": "cefc3b26",
+      "needsInterop": false
+    },
+    "react-dom/client": {
+      "src": "../../node_modules/.pnpm/react-dom@18.3.1_react@18.3.1/node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "20356858",
+      "needsInterop": true
+    },
+    "react-router-dom": {
+      "src": "../../node_modules/.pnpm/react-router-dom@6.30.3_rea_8738f2f356869a9d467b32612b8c1bd5/node_modules/react-router-dom/dist/index.js",
+      "file": "react-router-dom.js",
+      "fileHash": "8d7ed85b",
+      "needsInterop": false
+    }
+  },
+  "chunks": {
+    "chunk-FTI34L7V": {
+      "file": "chunk-FTI34L7V.js"
+    },
+    "chunk-7OZAAM47": {
+      "file": "chunk-7OZAAM47.js"
+    },
+    "chunk-4ALPPRTY": {
+      "file": "chunk-4ALPPRTY.js"
+    },
+    "chunk-G3PMV62Z": {
+      "file": "chunk-G3PMV62Z.js"
+    }
+  }
+}

@@ -8,6 +8,7 @@ export default function ServicesManager() {
     const [editingId, setEditingId] = useState(null);
     const [formData, setFormData] = useState({ title: '', description: '', icon_svg: '' });
     const [isAdding, setIsAdding] = useState(false);
+    const [modalConfig, setModalConfig] = useState(null);
 
     useEffect(() => {
         fetchServices();
@@ -40,20 +41,39 @@ export default function ServicesManager() {
 
     async function handleSave() {
         if (!formData.title || !formData.description || !formData.icon_svg) {
-            alert("All fields are required.");
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Missing Files',
+                message: 'All fields are required.'
+            });
             return;
         }
 
         if (isAdding) {
             const { error } = await supabase.from('services').insert([formData]);
-            if (error) alert(error.message);
+            if (error) {
+                setModalConfig({
+                    isOpen: true,
+                    type: 'error',
+                    title: 'Error Saving',
+                    message: error.message
+                });
+            }
             else {
                 fetchServices();
                 cancelEdit();
             }
         } else {
             const { error } = await supabase.from('services').update(formData).eq('id', editingId);
-            if (error) alert(error.message);
+            if (error) {
+                setModalConfig({
+                    isOpen: true,
+                    type: 'error',
+                    title: 'Error Saving',
+                    message: error.message
+                });
+            }
             else {
                 setServices(services.map(s => s.id === editingId ? { ...s, ...formData } : s));
                 cancelEdit();
@@ -61,10 +81,27 @@ export default function ServicesManager() {
         }
     }
 
-    async function handleDelete(id) {
-        if (!window.confirm("Delete this service permanently?")) return;
+    const triggerDeleteModal = (id) => {
+        setModalConfig({
+            isOpen: true,
+            type: 'confirm',
+            title: 'Delete Service',
+            message: 'Are you sure you want to permanently delete this service?',
+            onConfirm: () => confirmDelete(id)
+        });
+    };
+
+    async function confirmDelete(id) {
+        setModalConfig(null);
         const { error } = await supabase.from('services').delete().eq('id', id);
-        if (error) alert(error.message);
+        if (error) {
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Deletion Failed',
+                message: error.message
+            });
+        }
         else setServices(services.filter(s => s.id !== id));
     }
 
@@ -178,7 +215,7 @@ export default function ServicesManager() {
                                         <button onClick={() => handleEdit(service)} className="p-1.5 hover:bg-white/10 text-slate-400 hover:text-white rounded-md transition-colors">
                                             <Edit2 size={16} />
                                         </button>
-                                        <button onClick={() => handleDelete(service.id)} className="p-1.5 hover:bg-red-500/20 text-slate-400 hover:text-red-400 rounded-md transition-colors">
+                                        <button onClick={() => triggerDeleteModal(service.id)} className="p-1.5 hover:bg-red-500/20 text-slate-400 hover:text-red-400 rounded-md transition-colors">
                                             <Trash2 size={16} />
                                         </button>
                                     </div>
@@ -203,6 +240,68 @@ export default function ServicesManager() {
                     </div>
                 )}
             </div>
+
+            {/* Premium Glassmorphism Modal */}
+            {modalConfig?.isOpen && (
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                    <div
+                        className="absolute inset-0 bg-[#0c0c0e]/80 backdrop-blur-md"
+                        onClick={() => modalConfig.type !== 'error' ? setModalConfig(null) : undefined}
+                    ></div>
+
+                    <div
+                        className="relative w-full max-w-sm sm:max-w-md bg-[#16161a] border border-white/5 p-8 flex flex-col items-center text-center shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-3xl transform transition-all"
+                        style={{ animation: 'modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+                    >
+                        {/* Icon */}
+                        <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 shadow-inner border border-white/5 ${modalConfig.type === 'error' ? 'bg-red-500/10 text-red-500' : 'bg-red-500/10 text-red-500'}`}>
+                            {modalConfig.type === 'error' ? <Package size={32} className="opacity-50" /> : <Trash2 size={32} />}
+                        </div>
+
+                        <h3 className="text-xl font-serif text-white mb-3 tracking-wide">
+                            {modalConfig.title}
+                        </h3>
+
+                        <p className="text-sm text-slate-400 font-light mb-8 leading-relaxed whitespace-pre-line px-2">
+                            {modalConfig.message}
+                        </p>
+
+                        <div className="flex w-full gap-3">
+                            {modalConfig.type === 'confirm' ? (
+                                <>
+                                    <button
+                                        onClick={() => setModalConfig(null)}
+                                        className="flex-1 px-4 py-3 rounded-full border border-white/10 hover:bg-white/5 text-slate-300 font-medium text-sm transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={modalConfig.onConfirm}
+                                        className="flex-1 px-4 py-3 rounded-full bg-red-500/90 hover:bg-red-500 text-white font-medium text-sm transition-colors shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] border border-red-500/50"
+                                    >
+                                        Delete
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    onClick={() => setModalConfig(null)}
+                                    className="w-full px-4 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-medium text-sm transition-colors border border-white/5"
+                                >
+                                    Dismiss
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                @keyframes modalSlideUp {
+                    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+                    to { opacity: 1; transform: translateY(0) scale(1); }
+                }
+            `}} />
         </div>
     );
 }

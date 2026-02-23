@@ -6,7 +6,7 @@ const CATEGORIES = ['Agency Ads', 'Commercial ADS', 'Fashion', 'Recent Work', 'S
 
 function extractYouTubeId(url) {
     if (!url) return null;
-    const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+    const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
     const match = url.match(regExp);
     return (match && match[2].length === 11) ? match[2] : null;
 }
@@ -19,6 +19,7 @@ export default function VideosManager() {
     const [form, setForm] = useState({ title: '', youtube_url: '' });
     const [showForm, setShowForm] = useState(false);
     const [previewId, setPreviewId] = useState(null);
+    const [modalConfig, setModalConfig] = useState(null);
 
     useEffect(() => {
         fetchVideos();
@@ -37,12 +38,22 @@ export default function VideosManager() {
     async function handleAdd(e) {
         e.preventDefault();
         if (!form.title.trim() || !form.youtube_url.trim()) {
-            alert('Please fill in all fields.');
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Missing Fields',
+                message: 'Please fill in all fields.'
+            });
             return;
         }
         const youtube_id = extractYouTubeId(form.youtube_url);
         if (!youtube_id) {
-            alert('Invalid YouTube URL. Please paste a valid YouTube link.');
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Invalid URL',
+                message: 'Invalid YouTube URL. Please paste a valid YouTube link.'
+            });
             return;
         }
         setSaving(true);
@@ -53,7 +64,14 @@ export default function VideosManager() {
             youtube_id,
             sort_order: videos.filter(v => v.category === activeTab).length
         }]);
-        if (error) alert('Error adding video: ' + error.message);
+        if (error) {
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Error Adding Video',
+                message: error.message
+            });
+        }
         else {
             setForm({ title: '', youtube_url: '' });
             setShowForm(false);
@@ -62,11 +80,28 @@ export default function VideosManager() {
         setSaving(false);
     }
 
-    async function handleDelete(id) {
-        if (!window.confirm('Remove this video from the website?')) return;
+    const triggerDeleteModal = (id) => {
+        setModalConfig({
+            isOpen: true,
+            type: 'confirm',
+            title: 'Delete Video',
+            message: 'Are you sure you want to remove this video from the website?',
+            onConfirm: () => confirmDelete(id)
+        });
+    };
+
+    async function confirmDelete(id) {
+        setModalConfig(null);
         const { error } = await supabase.from('demo_videos').delete().eq('id', id);
         if (!error) setVideos(prev => prev.filter(v => v.id !== id));
-        else alert('Error: ' + error.message);
+        else {
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Deletion Failed',
+                message: error.message
+            });
+        }
     }
 
     const categoryVideos = videos.filter(v => v.category === activeTab);
@@ -157,8 +192,8 @@ export default function VideosManager() {
                             key={cat}
                             onClick={() => setActiveTab(cat)}
                             className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${activeTab === cat
-                                    ? 'bg-gradient-to-r from-[#2c1d38] to-[#1d1026] text-white border border-[#b052ff]/40 shadow-[0_0_12px_rgba(176,82,255,0.15)]'
-                                    : 'bg-[#16161a] text-slate-400 hover:text-white border border-white/5 hover:border-white/10'
+                                ? 'bg-gradient-to-r from-[#2c1d38] to-[#1d1026] text-white border border-[#b052ff]/40 shadow-[0_0_12px_rgba(176,82,255,0.15)]'
+                                : 'bg-[#16161a] text-slate-400 hover:text-white border border-white/5 hover:border-white/10'
                                 }`}
                         >
                             {cat}
@@ -199,7 +234,7 @@ export default function VideosManager() {
                                     </div>
                                     {/* Delete Button */}
                                     <button
-                                        onClick={() => handleDelete(video.id)}
+                                        onClick={() => triggerDeleteModal(video.id)}
                                         className="absolute top-2 right-2 p-2 bg-black/60 backdrop-blur-sm rounded-xl text-slate-300 hover:text-red-400 hover:bg-red-500/20 transition-all opacity-0 group-hover:opacity-100"
                                         title="Remove video"
                                     >
@@ -215,6 +250,68 @@ export default function VideosManager() {
                     </div>
                 )}
             </div>
+
+            {/* Premium Glassmorphism Modal */}
+            {modalConfig?.isOpen && (
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                    <div
+                        className="absolute inset-0 bg-[#0c0c0e]/80 backdrop-blur-md"
+                        onClick={() => modalConfig.type !== 'error' ? setModalConfig(null) : undefined}
+                    ></div>
+
+                    <div
+                        className="relative w-full max-w-sm sm:max-w-md bg-[#16161a] border border-white/5 p-8 flex flex-col items-center text-center shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-3xl transform transition-all"
+                        style={{ animation: 'modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+                    >
+                        {/* Icon */}
+                        <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 shadow-inner border border-white/5 ${modalConfig.type === 'error' ? 'bg-red-500/10 text-red-500' : 'bg-red-500/10 text-red-500'}`}>
+                            {modalConfig.type === 'error' ? <Video size={32} className="opacity-50" /> : <Trash2 size={32} />}
+                        </div>
+
+                        <h3 className="text-xl font-serif text-white mb-3 tracking-wide">
+                            {modalConfig.title}
+                        </h3>
+
+                        <p className="text-sm text-slate-400 font-light mb-8 leading-relaxed whitespace-pre-line px-2">
+                            {modalConfig.message}
+                        </p>
+
+                        <div className="flex w-full gap-3">
+                            {modalConfig.type === 'confirm' ? (
+                                <>
+                                    <button
+                                        onClick={() => setModalConfig(null)}
+                                        className="flex-1 px-4 py-3 rounded-full border border-white/10 hover:bg-white/5 text-slate-300 font-medium text-sm transition-colors"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <button
+                                        onClick={modalConfig.onConfirm}
+                                        className="flex-1 px-4 py-3 rounded-full bg-red-500/90 hover:bg-red-500 text-white font-medium text-sm transition-colors shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] border border-red-500/50"
+                                    >
+                                        Delete
+                                    </button>
+                                </>
+                            ) : (
+                                <button
+                                    onClick={() => setModalConfig(null)}
+                                    className="w-full px-4 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-medium text-sm transition-colors border border-white/5"
+                                >
+                                    Dismiss
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                @keyframes modalSlideUp {
+                    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+                    to { opacity: 1; transform: translateY(0) scale(1); }
+                }
+            `}} />
         </div>
     );
 }

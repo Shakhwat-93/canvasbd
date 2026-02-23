@@ -18,12 +18,15 @@ import {
     CreditCard,
     Truck,
     Video,
-    Star
+    Star,
+    Menu,
+    X
 } from 'lucide-react';
 
 export default function AdminLayout() {
     const { user, loading, signOut } = useAuth();
     const navigate = useNavigate();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
 
     React.useEffect(() => {
         if (!loading && !user) {
@@ -61,16 +64,36 @@ export default function AdminLayout() {
     return (
         <div className="flex h-screen bg-[#0c0c0e] text-slate-300 font-sans overflow-hidden selection:bg-[#b052ff]/20">
 
+            {/* Mobile Menu Backdrop */}
+            {isMobileMenuOpen && (
+                <div
+                    className="fixed inset-0 bg-[#0c0c0e]/80 backdrop-blur-sm z-40 lg:hidden"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                ></div>
+            )}
+
             {/* Sidebar */}
-            <aside className="w-[260px] bg-[#16161a] border-r border-white/5 flex flex-col relative z-20 shrink-0">
+            <aside className={`
+                w-[260px] bg-[#16161a] border-r border-white/5 flex flex-col shrink-0
+                fixed inset-y-0 left-0 z-50 lg:relative lg:translate-x-0
+                transform transition-transform duration-300 ease-in-out
+                ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+            `}>
                 {/* Brand */}
-                <div className="h-20 flex items-center px-8">
+                <div className="h-20 flex items-center justify-between px-8 shrink-0">
                     <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#c068ff] to-[#ff5efb] flex items-center justify-center shadow-lg shadow-[#b052ff]/20">
                             <span className="text-white font-bold text-lg leading-none">C</span>
                         </div>
-                        <span className="text-white font-serif font-bold text-xl tracking-tight">CANVASBD</span>
+                        <span className="text-white font-serif font-bold text-xl tracking-tight hidden sm:block">CANVASBD</span>
                     </div>
+                    {/* Close button for mobile */}
+                    <button
+                        className="lg:hidden text-slate-400 hover:text-white"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                    >
+                        <X size={20} />
+                    </button>
                 </div>
 
                 {/* Navigation Area */}
@@ -84,6 +107,7 @@ export default function AdminLayout() {
                                     key={link.to}
                                     to={link.to}
                                     end={link.end}
+                                    onClick={() => setIsMobileMenuOpen(false)}
                                     className={({ isActive }) =>
                                         `flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium ${isActive
                                             ? 'bg-gradient-to-r from-[#2c1d38] to-transparent text-white'
@@ -113,6 +137,7 @@ export default function AdminLayout() {
                                 <NavLink
                                     key={link.to}
                                     to={link.to}
+                                    onClick={() => setIsMobileMenuOpen(false)}
                                     className={({ isActive }) =>
                                         `flex items-center gap-4 px-4 py-2.5 rounded-xl transition-all duration-200 text-sm font-medium ${isActive
                                             ? 'bg-gradient-to-r from-[#2c1d38] to-transparent text-white'
@@ -143,9 +168,18 @@ export default function AdminLayout() {
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col h-full overflow-hidden relative z-10 w-full min-w-0">
                 {/* Topbar */}
-                <header className="h-20 !flex !flex-row items-center justify-between w-full px-8 bg-[#0c0c0e] border-b border-white/5 shrink-0">
+                <header className="h-20 !flex !flex-row items-center justify-between lg:justify-end w-full px-4 md:px-8 bg-[#0c0c0e] border-b border-white/5 shrink-0">
+
+                    {/* Mobile Menu Toggle Button */}
+                    <button
+                        className="lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
+                        onClick={() => setIsMobileMenuOpen(true)}
+                    >
+                        <Menu size={24} />
+                    </button>
+
                     {/* Search Bar - hidden on mobile, takes available space up to max-w-md on desktop */}
-                    <div className="relative w-full max-w-md hidden md:block">
+                    <div className="relative w-full max-w-md hidden lg:block mr-auto">
                         <Search size={16} className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" />
                         <input
                             type="text"
@@ -153,9 +187,6 @@ export default function AdminLayout() {
                             className="w-full bg-[#16161a] border border-white/5 rounded-xl pl-11 pr-4 py-2.5 text-sm text-slate-300 focus:outline-none focus:border-[#b052ff]/50 focus:ring-1 focus:ring-[#b052ff]/50 transition-all placeholder:text-slate-600"
                         />
                     </div>
-
-                    {/* Spacer for flex-between to work even on mobile where search is hidden */}
-                    <div className="md:hidden"></div>
 
                     {/* Right side icons */}
                     <div className="!flex !flex-row items-center gap-6 shrink-0 ml-auto">

@@ -8,8 +8,8 @@ export default function PricingExtraTables() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
 
                 {/* ONE-TIME SERVICES PACKAGE */}
-                <div className="pricing-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '2.5rem' }}>
-                    <div className="pricing-card-caption text-center" style={{ width: '100%', marginBottom: '2.5rem', fontSize: '1.5rem', fontWeight: 'bold' }}>
+                <div className="pricing-card flex flex-col h-full p-6 md:p-10 bg-[#1b1b25] border border-[#302c4f] rounded-[2rem]">
+                    <div className="w-full mb-8 text-xl md:text-2xl font-bold text-center text-white">
                         {oneTime.title}
                     </div>
 
@@ -45,8 +45,8 @@ export default function PricingExtraTables() {
                 </div>
 
                 {/* BULK VIDEO PRODUCTION */}
-                <div className="pricing-card" style={{ display: 'flex', flexDirection: 'column', height: '100%', padding: '2.5rem' }}>
-                    <div className="pricing-card-caption text-center" style={{ width: '100%', marginBottom: '2.5rem', fontSize: '1.5rem', fontWeight: 'bold' }}>
+                <div className="pricing-card flex flex-col h-full p-6 md:p-10 bg-[#1b1b25] border border-[#302c4f] rounded-[2rem]">
+                    <div className="w-full mb-8 text-xl md:text-2xl font-bold text-center text-white">
                         {bulk.title}
                     </div>
 

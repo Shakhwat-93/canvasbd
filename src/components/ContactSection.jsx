@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, supabaseAnon } from '../lib/supabase';
 
 export default function ContactSection() {
     const sectionRef = useRef(null);
     const [isSubmitting, setIsSubmitting] = useState(false);
     const [submitStatus, setSubmitStatus] = useState(null); // 'success' or 'error'
+    const [errorMessage, setErrorMessage] = useState('');
     const [companyData, setCompanyData] = useState(null);
     const [servicesData, setServicesData] = useState([]);
 
@@ -12,6 +13,7 @@ export default function ContactSection() {
         e.preventDefault();
         setIsSubmitting(true);
         setSubmitStatus(null);
+        setErrorMessage('');
 
         const formData = new FormData(e.target);
         const data = {
@@ -23,7 +25,7 @@ export default function ContactSection() {
         };
 
         try {
-            const { error } = await supabase
+            const { error } = await supabaseAnon
                 .from('contacts')
                 .insert([data]);
 
@@ -34,6 +36,7 @@ export default function ContactSection() {
         } catch (error) {
             console.error('Error submitting form:', error);
             setSubmitStatus('error');
+            setErrorMessage(error.message || 'Unknown database error occurred.');
         } finally {
             setIsSubmitting(false);
         }
@@ -75,24 +78,69 @@ export default function ContactSection() {
 
     return (
         <div id="contact" ref={sectionRef}>
+            {/* Premium Success Modal */}
+            {submitStatus === 'success' && (
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                    {/* Backdrop */}
+                    <div
+                        className="absolute inset-0 bg-[#0c0c0e]/80 backdrop-blur-md"
+                        onClick={() => setSubmitStatus(null)}
+                    ></div>
+
+                    {/* Modal Content */}
+                    <div
+                        className="relative w-full max-w-sm sm:max-w-md bg-[#16161a] border border-white/5 p-8 flex flex-col items-center text-center shadow-[0_0_50px_rgba(52,211,153,0.1)] rounded-3xl transform transition-all"
+                        style={{ animation: 'modalSlideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+                    >
+                        {/* Glowing orb behind icon */}
+                        <div className="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-emerald-500/20 blur-[40px] rounded-full pointer-events-none"></div>
+
+                        {/* Custom SVG Checkmark */}
+                        <div className="w-20 h-20 rounded-full bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center mb-6 relative">
+                            <svg className="w-10 h-10 text-emerald-400 z-10 drop-shadow-[0_0_12px_rgba(52,211,153,0.8)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                                <path d="M20 6L9 17l-5-5" strokeDasharray="30" strokeDashoffset="30" style={{ animation: 'dashCheck 0.6s 0.2s ease-out forwards' }} />
+                            </svg>
+                        </div>
+
+                        <h3 className="text-2xl font-bold font-serif text-white tracking-tight mb-3 relative z-10">Message Sent!</h3>
+                        <p className="text-slate-400 text-sm mb-8 leading-relaxed max-w-[280px] relative z-10">
+                            We've received your request and will get back to you within 24 hours.
+                        </p>
+
+                        <button
+                            onClick={() => setSubmitStatus(null)}
+                            className="w-full bg-emerald-500/10 hover:bg-emerald-500/20 text-emerald-400 font-medium py-3.5 px-6 rounded-xl transition-all border border-emerald-500/20 relative z-10 hover:shadow-[0_0_20px_rgba(52,211,153,0.2)]"
+                        >
+                            Done
+                        </button>
+                    </div>
+
+                    <style dangerouslySetInnerHTML={{
+                        __html: `
+                        @keyframes modalSlideUp {
+                            from { opacity: 0; transform: translateY(20px) scale(0.95); }
+                            to { opacity: 1; transform: translateY(0) scale(1); }
+                        }
+                        @keyframes dashCheck {
+                            to { stroke-dashoffset: 0; }
+                        }
+                    `}} />
+                </div>
+            )}
+
             {/* Contact Form Section */}
             <section className="contact-form-section">
                 <img src="/images/68522b8afb7001f33ec58e39_c711a787cc42eb29e73062dc3ca82256_Bg%2002.svg" loading="lazy" alt="" className="contact-form-bg-decor" />
-                <div className="container">
+                <div className="container px-4 sm:px-6 lg:px-8 mx-auto">
                     <div data-animate className="contact-form-card">
                         <div className="contact-form-header">
                             <h2 className="contact-section-title">Send Us a Message</h2>
                             <p className="contact-section-text">Tell us about your project and we'll get back to you within 24 hours.</p>
                         </div>
                         <form className="contact-form" onSubmit={handleSubmit}>
-                            {submitStatus === 'success' && (
-                                <div className="form-success-message" style={{ padding: '16px', background: 'rgba(52, 211, 153, 0.1)', color: '#34d399', borderRadius: '8px', marginBottom: '24px', textAlign: 'center' }}>
-                                    Thank you! Your message has been sent successfully. We will get back to you shortly.
-                                </div>
-                            )}
                             {submitStatus === 'error' && (
-                                <div className="form-error-message" style={{ padding: '16px', background: 'rgba(248, 113, 113, 0.1)', color: '#f87171', borderRadius: '8px', marginBottom: '24px', textAlign: 'center' }}>
-                                    Oops! Something went wrong. Please try again or contact us directly.
+                                <div className="form-error-message" style={{ padding: '16px', background: 'rgba(248, 113, 113, 0.1)', color: '#f87171', borderRadius: '8px', marginBottom: '24px', textAlign: 'center', wordBreak: 'break-word' }}>
+                                    Oops! Something went wrong: {errorMessage}
                                 </div>
                             )}
                             <div className="contact-form-row">

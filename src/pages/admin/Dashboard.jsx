@@ -94,11 +94,11 @@ export default function Dashboard() {
                                 </button>
                             </div>
                             <h3 className="text-white/90 font-medium text-[13px] mb-2">Revenue Overview</h3>
-                            <div className="flex items-end gap-3 mb-2">
+                            <div className="flex items-end gap-3 mb-2 blur-md select-none opacity-80 transition-all hover:blur-sm">
                                 <span className="text-3xl font-bold text-white tracking-tight">${stats.revenue.toLocaleString()}</span>
                                 <span className="text-[11px] font-bold bg-[#8add8f]/20 text-[#8add8f] px-2 py-1 rounded-md mb-1">+12.95%</span>
                             </div>
-                            <p className="text-white/70 text-[11px]">Compared to last month</p>
+                            <p className="text-white/70 text-[11px] blur-sm select-none opacity-80 transition-all">Compared to last month</p>
                         </div>
                     </div>
 
@@ -149,18 +149,18 @@ export default function Dashboard() {
                             </button>
                         </div>
                         <h3 className="text-slate-400 font-medium text-[13px] mb-2">Conversion</h3>
-                        <div className="flex items-end gap-3 mb-2">
+                        <div className="flex items-end gap-3 mb-2 blur-md select-none opacity-80 transition-all hover:blur-sm">
                             <span className="text-3xl font-bold text-white tracking-tight">{stats.conversion}%</span>
                             <span className="text-[11px] font-bold bg-emerald-500/10 text-emerald-400 px-2 py-1 rounded-md mb-1">+1.2%</span>
                         </div>
-                        <p className="text-slate-500 text-[11px]">Compared to last month</p>
+                        <p className="text-slate-500 text-[11px] blur-sm select-none opacity-80 transition-all">Compared to last month</p>
                     </div>
                 </div>
 
                 {/* Secondary Grid Area (Charts & Lists) */}
                 <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 w-full">
                     {/* Main Chart Area */}
-                    <div className="xl:col-span-2 bg-[#16161a] border border-white/5 rounded-3xl p-8 relative overflow-hidden">
+                    <div className="xl:col-span-2 bg-[#16161a] border border-white/5 rounded-3xl p-8 relative overflow-hidden blur-md select-none opacity-80 transition-all hover:blur-sm">
                         <div className="flex justify-between items-center mb-8 relative z-10">
                             <h2 className="text-lg font-bold font-serif text-white tracking-tight">Revenue Analytics</h2>
                             <div className="flex gap-4 items-center">
@@ -249,7 +249,7 @@ export default function Dashboard() {
                     </div>
 
                     {/* Regions Side Panel */}
-                    <div className="bg-[#16161a] border border-white/5 rounded-3xl p-8 relative overflow-hidden flex flex-col">
+                    <div className="bg-[#16161a] border border-white/5 rounded-3xl p-8 relative overflow-hidden flex flex-col blur-md select-none opacity-80 transition-all hover:blur-sm">
                         <div className="flex justify-between items-center mb-8">
                             <h2 className="text-lg font-bold font-serif text-white tracking-tight">Orders by Region</h2>
                             <button className="text-slate-500 hover:text-white">

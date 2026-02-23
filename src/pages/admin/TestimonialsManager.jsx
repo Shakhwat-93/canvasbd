@@ -14,6 +14,7 @@ export default function TestimonialsManager() {
     const [screenshotFile, setScreenshotFile] = useState(null);
     const [profilePreview, setProfilePreview] = useState(null);
     const [screenshotPreview, setScreenshotPreview] = useState(null);
+    const [modalConfig, setModalConfig] = useState(null);
     const profileInputRef = useRef(null);
     const screenshotInputRef = useRef(null);
 
@@ -77,7 +78,12 @@ export default function TestimonialsManager() {
 
     async function handleSave() {
         if (!formData.name || !formData.designation || !formData.review_text) {
-            alert('Name, designation, and review text are required.');
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Missing Files',
+                message: 'Name, designation, and review text are required.'
+            });
             return;
         }
         setSaving(true);
@@ -108,13 +114,28 @@ export default function TestimonialsManager() {
             await fetchTestimonials();
             cancelAdd();
         } catch (err) {
-            alert('Error saving: ' + err.message);
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Error Saving',
+                message: `Error saving review: ${err.message}`
+            });
         }
         setSaving(false);
     }
 
-    async function handleDelete(testimonial) {
-        if (!window.confirm(`Delete review from "${testimonial.name}"?`)) return;
+    const triggerDeleteModal = (testimonial) => {
+        setModalConfig({
+            isOpen: true,
+            type: 'confirm',
+            title: 'Delete Review',
+            message: `Are you sure you want to permanently delete the review from "${testimonial.name}"?`,
+            onConfirm: () => confirmDelete(testimonial)
+        });
+    };
+
+    async function confirmDelete(testimonial) {
+        setModalConfig(null);
 
         // Delete storage files
         try {
@@ -129,8 +150,14 @@ export default function TestimonialsManager() {
         } catch (e) { /* storage cleanup is best-effort */ }
 
         const { error } = await supabase.from('testimonials').delete().eq('id', testimonial.id);
-        if (error) alert(error.message);
-        else setTestimonials(testimonials.filter(t => t.id !== testimonial.id));
+        if (error) {
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Deletion Failed',
+                message: error.message
+            });
+        } else setTestimonials(testimonials.filter(t => t.id !== testimonial.id));
     }
 
     async function toggleFeatured(testimonial) {
@@ -359,7 +386,7 @@ export default function TestimonialsManager() {
                                             <Star size={14} /> {t.is_featured ? 'Unfeatured' : 'Feature'}
                                         </button>
                                         <button
-                                            onClick={() => handleDelete(t)}
+                                            onClick={() => triggerDeleteModal(t)}
                                             className="p-1.5 hover:bg-red-500/20 text-slate-400 hover:text-red-400 rounded-md transition-colors ml-auto text-xs flex items-center gap-1"
                                         >
                                             <Trash2 size={14} /> Delete
@@ -384,7 +411,68 @@ export default function TestimonialsManager() {
                         )}
                     </div>
                 )}
+                {/* Premium Glassmorphism Modal */}
+                {modalConfig?.isOpen && (
+                    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
+                        <div
+                            className="absolute inset-0 bg-[#0c0c0e]/80 backdrop-blur-md"
+                            onClick={() => modalConfig.type !== 'error' ? setModalConfig(null) : undefined}
+                        ></div>
+
+                        <div
+                            className="relative w-full max-w-sm sm:max-w-md bg-[#16161a] border border-white/5 p-8 flex flex-col items-center text-center shadow-[0_0_50px_rgba(0,0,0,0.5)] rounded-3xl transform transition-all"
+                            style={{ animation: 'modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards' }}
+                        >
+                            {/* Icon */}
+                            <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-6 shadow-inner border border-white/5 ${modalConfig.type === 'error' ? 'bg-red-500/10 text-red-500' : 'bg-red-500/10 text-red-500'}`}>
+                                {modalConfig.type === 'error' ? <Star size={32} className="opacity-50" /> : <Trash2 size={32} />}
+                            </div>
+
+                            <h3 className="text-xl font-serif text-white mb-3 tracking-wide">
+                                {modalConfig.title}
+                            </h3>
+
+                            <p className="text-sm text-slate-400 font-light mb-8 leading-relaxed whitespace-pre-line px-2">
+                                {modalConfig.message}
+                            </p>
+
+                            <div className="flex w-full gap-3">
+                                {modalConfig.type === 'confirm' ? (
+                                    <>
+                                        <button
+                                            onClick={() => setModalConfig(null)}
+                                            className="flex-1 px-4 py-3 rounded-full border border-white/10 hover:bg-white/5 text-slate-300 font-medium text-sm transition-colors"
+                                        >
+                                            Cancel
+                                        </button>
+                                        <button
+                                            onClick={modalConfig.onConfirm}
+                                            className="flex-1 px-4 py-3 rounded-full bg-red-500/90 hover:bg-red-500 text-white font-medium text-sm transition-colors shadow-[0_0_20px_rgba(239,68,68,0.3)] hover:shadow-[0_0_30px_rgba(239,68,68,0.5)] border border-red-500/50"
+                                        >
+                                            Delete
+                                        </button>
+                                    </>
+                                ) : (
+                                    <button
+                                        onClick={() => setModalConfig(null)}
+                                        className="w-full px-4 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-medium text-sm transition-colors border border-white/5"
+                                    >
+                                        Dismiss
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </div>
+                )}
             </div>
+
+            <style dangerouslySetInnerHTML={{
+                __html: `
+                    @keyframes modalSlideUp {
+                        from { opacity: 0; transform: translateY(20px) scale(0.95); }
+                        to { opacity: 1; transform: translateY(0) scale(1); }
+                    }
+                `}} />
         </div>
     );
 }
