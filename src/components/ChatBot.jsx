@@ -5,7 +5,7 @@ const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 export default function ChatBot() {
     const [isOpen, setIsOpen] = useState(false);
     const [messages, setMessages] = useState([
-        { role: 'bot', content: 'Hello! 👋 Welcome to Canvas BD. How can I help you today?' }
+        { role: 'bot', content: 'Hello! 👋 Welcome to Canvas Digital. How can I help you today?' }
     ]);
     const [input, setInput] = useState('');
     const [isTyping, setIsTyping] = useState(false);
@@ -45,7 +45,7 @@ export default function ChatBot() {
             const data = await res.json();
             setMessages(prev => [...prev, { role: 'bot', content: data.reply || 'Sorry, please try again.' }]);
         } catch {
-            setMessages(prev => [...prev, { role: 'bot', content: 'Connection error. Please try again or call us at 01626777744.' }]);
+            setMessages(prev => [...prev, { role: 'bot', content: 'Connection error. Please try again or call us at 01990-081308.' }]);
         }
         setIsTyping(false);
     }
@@ -298,7 +298,7 @@ export default function ChatBot() {
                                 </svg>
                             </div>
                             <div className="chatbot-header-info">
-                                <div className="chatbot-header-name">Canvas BD Assistant</div>
+                                <div className="chatbot-header-name">Canvas Digital Assistant</div>
                                 <div className="chatbot-header-status">
                                     <span className="dot" />
                                     Always online

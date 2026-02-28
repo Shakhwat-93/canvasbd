@@ -55,7 +55,7 @@ export default function Settings() {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                     <div>
                         <h1 className="text-2xl font-semibold text-white tracking-tight">System Configuration</h1>
-                        <p className="text-sm text-slate-400 mt-1">Manage global details synchronized across the Canvas BD platform.</p>
+                        <p className="text-sm text-slate-400 mt-1">Manage global details synchronized across the Canvas Digital platform.</p>
                     </div>
                     <div className="flex items-center gap-3">
                         <button

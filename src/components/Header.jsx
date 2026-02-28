@@ -27,14 +27,14 @@ export default function Header() {
     return (
         <div data-animation="default" data-collapse="medium" data-duration="400" role="banner" className={`nav-bar w-nav${scrolled ? ' scrolled' : ''}`}>
             <div className="nav-container">
-                <div className="nav-wrapper flex items-center justify-between !px-4 !py-3 md:!px-[60px] md:!py-[16px]">
+                <div className="nav-wrapper flex items-center justify-between !px-4 !py-3 md:!px-[60px] md:!py-[16px] max-lg:!bg-none max-lg:!rounded-none">
 
                     {/* Brand Logo */}
                     <a href="#top" className="brand-logo-wrap shrink-0 flex items-center" onClick={(e) => scrollToSection(e, 'top')}>
                         <img
                             src="/images/br/logo.png"
                             alt="Canvas Bd Logo"
-                            className="object-contain h-10 md:h-12 w-auto scale-[1.8] md:scale-[2.6] origin-left"
+                            className="object-contain h-10 md:h-12 w-auto scale-[2.4] md:scale-[2.6] lg:scale-[3.2] xl:scale-[3.6] origin-left"
                         />
                     </a>
 

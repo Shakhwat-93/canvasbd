@@ -61,7 +61,7 @@ export default function Hero() {
                     }
                 });
             },
-            { threshold: 0.1, rootMargin: '0px 0px -30px 0px' }
+            { threshold: 0.05, rootMargin: '0px 0px 50px 0px' }
         );
 
         elements.forEach((el) => observer.observe(el));
@@ -83,17 +83,17 @@ export default function Hero() {
                         <div className="hero-content-wrap flex flex-col items-center text-center">
                             <div className="section-caption-wrap mb-6 md:mb-8">
                                 <div className="section-caption inline-flex items-center justify-center px-4 py-1.5 md:py-2 rounded-full border border-white/10 bg-white/5 backdrop-blur-md">
-                                    <div className="section-caption-text text-xs md:text-sm font-medium text-slate-300"><strong>Canvas Bd</strong> — Video Production Agency</div>
+                                    <div className="section-caption-text text-xs md:text-sm font-medium text-slate-300"><strong>Canvas Digital</strong> — A Digital Ad Agency</div>
                                 </div>
                             </div>
                             <div data-animate data-animate-delay="200" className="hero-title-wrap max-w-[1000px] mx-auto px-2 sm:px-0">
-                                <h1 className="hero-title text-[38px] leading-[1.15] sm:text-[48px] md:text-[64px] lg:text-[80px] font-bold text-white tracking-tight">
-                                    Premium Video Production<br className="hidden md:block" /> & Digital Marketing
+                                <h1 className="hero-title text-[38px] leading-[1.15] sm:text-[48px] md:text-[56px] lg:text-[72px] font-bold text-white tracking-tight">
+                                    Canvas Digital Your 360° Digital Growth Agency
                                 </h1>
                             </div>
                             <div data-animate data-animate-delay="400" className="hero-text-wrap max-w-[800px] mx-auto mt-5 md:mt-8 px-4 sm:px-0">
                                 <p className="hero-text text-base sm:text-lg lg:text-xl text-slate-400 leading-relaxed font-light">
-                                    Elevate your brand with cinematic video production, product photography, and data-driven digital marketing strategies. Canvas Bd delivers agency-level quality for businesses and creators.
+                                    From professional cinematography and batch-video production to expert SEO and GTM setup—we provide everything your business needs to thrive in 2026. 🚀🎥
                                 </p>
                             </div>
                             <div data-animate data-animate-delay="600" className="hero-button-wrap flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 mt-8 md:mt-12 w-full sm:w-auto px-4 sm:px-0">
@@ -137,20 +137,20 @@ export default function Hero() {
 
                     <div className="inline-block animate-[scroll_40s_linear_infinite]">
                         <div className="inline-flex items-center gap-12 sm:gap-16 lg:gap-24 pr-12 sm:pr-16 lg:pr-24 align-middle">
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#b052ff] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">BENGAL</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#34d399] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">NEXUS</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#ff5df5] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">DYNAMICS</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-white opacity-40 hover:opacity-100 transition-all duration-300">ASIATIC</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#b052ff] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">PADMA</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#34d399] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">CHARKA</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-slate-400 opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">BENGAL</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-slate-400 opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">NEXUS</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-slate-400 opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">DYNAMICS</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-slate-400 opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">ASIATIC</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-slate-400 opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">PADMA</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-slate-400 opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">CHARKA</div>
                         </div>
                         <div className="inline-flex items-center gap-12 sm:gap-16 lg:gap-24 pr-12 sm:pr-16 lg:pr-24 align-middle">
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#b052ff] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">BENGAL</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#34d399] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">NEXUS</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#ff5df5] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">DYNAMICS</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-white opacity-40 hover:opacity-100 transition-all duration-300">ASIATIC</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#b052ff] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">PADMA</div>
-                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-[#34d399] opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">CHARKA</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-slate-400 opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">BENGAL</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-slate-400 opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">NEXUS</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-slate-400 opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">DYNAMICS</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-slate-400 opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">ASIATIC</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-slate-400 opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">PADMA</div>
+                            <div className="ticker-logo text-xl md:text-2xl font-bold tracking-widest text-slate-400 opacity-40 hover:opacity-100 hover:text-white transition-all duration-300">CHARKA</div>
                         </div>
                     </div>
                 </div>

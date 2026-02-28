@@ -3,6 +3,28 @@ import { services as staticServices } from '../data/services';
 export default function PricingExtraTables() {
     const { oneTime, bulk } = staticServices;
 
+    const formatPriceToken = (text) => {
+        if (!text) return null;
+        if (text === "UPON DISCUSSION") {
+            return <span className="text-[#ff7a00]">{text}</span>;
+        }
+
+        // Handle variations like "5,000 / Unit" or "200 / Photo"
+        if (text.includes('/')) {
+            const parts = text.split('/');
+            if (parts.length === 2) {
+                return (
+                    <div className="flex items-baseline md:items-center">
+                        <span className="text-[#ff7a00] leading-none">{parts[0].trim()}</span>
+                        <span className="text-white/60 ml-2 font-medium text-[15px] leading-none">/ {parts[1].trim()}</span>
+                    </div>
+                );
+            }
+        }
+
+        return <span className="text-[#ff7a00]">{text}</span>;
+    };
+
     return (
         <div className="w-full mt-12 mb-16" data-animate>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -31,8 +53,8 @@ export default function PricingExtraTables() {
                                             </div>
                                             {item.name}
                                         </td>
-                                        <td className="py-6 px-4 font-bold text-white text-lg tracking-wide">
-                                            {item.price}
+                                        <td className="py-6 px-4 font-bold text-lg tracking-wide">
+                                            {formatPriceToken(item.price)}
                                         </td>
                                         <td className="py-6 px-4 text-white/60 text-[14px] leading-relaxed">
                                             {item.remarks}
@@ -68,11 +90,11 @@ export default function PricingExtraTables() {
                                             </div>
                                             {item.quantity}
                                         </td>
-                                        <td className="py-6 px-4 font-bold text-white text-lg tracking-wide">
-                                            {item.priceModel}
+                                        <td className="py-6 px-4 font-bold text-lg tracking-wide">
+                                            {formatPriceToken(item.priceModel)}
                                         </td>
-                                        <td className="py-6 px-4 font-bold text-white text-lg tracking-wide">
-                                            {item.priceMotion}
+                                        <td className="py-6 px-4 font-bold text-lg tracking-wide">
+                                            {formatPriceToken(item.priceMotion)}
                                         </td>
                                     </tr>
                                 ))}

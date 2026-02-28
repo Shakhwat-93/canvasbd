@@ -141,10 +141,32 @@ export default function Features() {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+                    {/* Desktop/Tablet Grid View */}
+                    <div className="hidden md:grid grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 w-full">
                         {services.map((service, index) => (
                             <ServiceCard key={index} {...service} />
                         ))}
+                    </div>
+
+                    {/* Mobile Single Card View (Compact/Titles Only) */}
+                    <div data-animate className="md:hidden w-full bg-white/[0.02] backdrop-blur-xl border border-white/5 rounded-3xl p-5 flex flex-col shadow-2xl">
+                        {services.map((service, index) => {
+                            const Icon = service.icon;
+                            return (
+                                <div key={index} className="flex gap-4 items-center border-b border-white/5 py-4 first:pt-0 last:border-0 last:pb-0">
+                                    <div className="p-2.5 rounded-2xl bg-white/5 shrink-0 border border-white/10" style={{ color: service.color }}>
+                                        <Icon size={20} />
+                                    </div>
+                                    <div className="flex-grow">
+                                        <h3 className="text-[15px] font-bold text-white leading-tight tracking-tight m-0">{service.title}</h3>
+                                        {/* Description hidden on mobile as per user request to make cards shorter */}
+                                    </div>
+                                    <div className="shrink-0 text-white/20">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6" /></svg>
+                                    </div>
+                                </div>
+                            );
+                        })}
                     </div>
                 </div>
             </div>

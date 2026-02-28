@@ -12,8 +12,8 @@ export default function Home() {
             <Hero />
             <AboutSection />
             <Features />
-            <Services />
             <VideoGallery />
+            <Services />
             <Testimonials />
             <ContactSection />
         </div>

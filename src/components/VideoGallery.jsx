@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { supabase } from '../lib/supabase';
-import { X } from 'lucide-react';
+import { X, ArrowLeft, Folder, PlayCircle, Video } from 'lucide-react';
 
 // Match site theme from CSS variables
 const THEME = {
@@ -15,29 +15,45 @@ const THEME = {
     borderAlt: '#454559',
 };
 
-const CATEGORIES = ['All', 'Agency Ads', 'Commercial ADS', 'Fashion', 'Recent Work', 'Social Media Ads'];
-
 function getThumb(id) {
-    return `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+    if (!id || typeof id !== 'string') return null;
+    if (id.length === 11) {
+        return `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+    }
+    // Return null for Drive to render a placeholder instead of breaking
+    return null;
 }
 
 export default function VideoGallery() {
     const [videos, setVideos] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState('All');
+    const [selectedCategory, setSelectedCategory] = useState(null); // replaces activeTab
     const [selectedVideo, setSelectedVideo] = useState(null);
     const sectionRef = useRef(null);
 
     useEffect(() => {
-        async function fetchVideos() {
-            const { data, error } = await supabase
+        async function fetchData() {
+            setLoading(true);
+
+            // Fetch categories
+            const { data: catData, error: catError } = await supabase
+                .from('video_categories')
+                .select('*')
+                .order('sort_order', { ascending: true });
+
+            if (!catError) setCategories(catData || []);
+
+            // Fetch videos
+            const { data: videoData, error: vidError } = await supabase
                 .from('demo_videos')
                 .select('*')
                 .order('sort_order', { ascending: true });
-            if (!error) setVideos(data || []);
+
+            if (!vidError) setVideos(videoData || []);
             setLoading(false);
         }
-        fetchVideos();
+        fetchData();
     }, []);
 
     // Match site's IntersectionObserver animation pattern
@@ -60,7 +76,7 @@ export default function VideoGallery() {
         );
         elements.forEach((el) => observer.observe(el));
         return () => observer.disconnect();
-    }, [videos]);
+    }, [videos, selectedCategory]);
 
     const handleClose = useCallback(() => setSelectedVideo(null), []);
 
@@ -70,7 +86,8 @@ export default function VideoGallery() {
         return () => window.removeEventListener('keydown', fn);
     }, [handleClose]);
 
-    const filtered = activeTab === 'All' ? videos : videos.filter(v => v.category === activeTab);
+    // Get videos for selected category
+    const categoryVideos = selectedCategory ? videos.filter(v => v.category === selectedCategory) : [];
 
     if (!loading && videos.length === 0) return null;
 
@@ -135,45 +152,6 @@ export default function VideoGallery() {
                     text-align: center;
                     margin-bottom: 56px;
                 }
-                .vg-tabs {
-                    display: flex;
-                    gap: 8px;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                    margin-bottom: 48px;
-                }
-                .vg-tab {
-                    border: 1px solid ${THEME.border};
-                    background-color: ${THEME.cardBg};
-                    color: ${THEME.textMuted};
-                    border-radius: 8px;
-                    padding: 9px 18px;
-                    font-size: 14px;
-                    font-family: Inter, sans-serif;
-                    font-weight: 500;
-                    cursor: pointer;
-                    transition: all 0.25s ease;
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 6px;
-                    line-height: 1;
-                }
-                .vg-tab:hover {
-                    border-color: ${THEME.brandColor};
-                    color: ${THEME.text};
-                }
-                .vg-tab.active {
-                    background-image: ${THEME.brand};
-                    border-color: transparent;
-                    color: #e3e3ec;
-                }
-                .vg-tab-count {
-                    font-size: 11px;
-                    font-weight: 700;
-                    padding: 2px 6px;
-                    border-radius: 4px;
-                    background: rgba(255,255,255,0.15);
-                }
                 .vg-grid {
                     display: grid;
                     grid-template-columns: repeat(3, 1fr);
@@ -181,6 +159,87 @@ export default function VideoGallery() {
                 }
                 @media (max-width: 991px) { .vg-grid { grid-template-columns: repeat(2, 1fr); } }
                 @media (max-width: 479px)  { .vg-grid { grid-template-columns: 1fr; } }
+                
+                /* Folder Card Styling */
+                .vg-folder {
+                    background-color: ${THEME.cardBg};
+                    border: 1px solid ${THEME.border};
+                    border-radius: 16px;
+                    overflow: hidden;
+                    cursor: pointer;
+                    transition: border-color 0.25s ease, transform 0.25s ease, box-shadow 0.25s ease;
+                    display: flex;
+                    flex-direction: column;
+                }
+                .vg-folder:hover {
+                    border-color: ${THEME.brandColor};
+                    transform: translateY(-4px);
+                    box-shadow: 0 16px 40px rgba(115,95,244,0.15);
+                }
+                .vg-folder-cover {
+                    position: relative;
+                    width: 100%;
+                    padding-top: 56.25%;
+                    background: ${THEME.cardBgAlt};
+                    border-bottom: 1px solid ${THEME.border};
+                }
+                .vg-folder-cover img {
+                    position: absolute;
+                    inset: 0;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    opacity: 0.6;
+                    transition: opacity 0.3s ease;
+                }
+                .vg-folder:hover .vg-folder-cover img {
+                    opacity: 0.8;
+                }
+                .vg-folder-overlay {
+                    position: absolute;
+                    inset: 0;
+                    background: linear-gradient(0deg, ${THEME.cardBg} 0%, transparent 100%);
+                }
+                .vg-folder-icon {
+                    position: absolute;
+                    bottom: -20px;
+                    left: 20px;
+                    width: 48px;
+                    height: 48px;
+                    background: ${THEME.bg};
+                    border: 1px solid ${THEME.borderAlt};
+                    border-radius: 12px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: ${THEME.brandColor};
+                    z-index: 10;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+                    transition: color 0.3s ease, border-color 0.3s ease;
+                }
+                .vg-folder:hover .vg-folder-icon {
+                    color: #fff;
+                    border-color: ${THEME.brandColor};
+                    background: ${THEME.brand};
+                }
+                .vg-folder-info {
+                    padding: 32px 20px 20px;
+                }
+                .vg-folder-title {
+                    color: ${THEME.text};
+                    font-family: Inter, sans-serif;
+                    font-size: 18px;
+                    font-weight: 700;
+                    margin: 0 0 4px;
+                }
+                .vg-folder-count {
+                    color: ${THEME.textMuted};
+                    font-size: 13px;
+                    font-family: Inter, sans-serif;
+                    margin: 0;
+                }
+                
+                /* Video Card Styling */
                 .vg-card {
                     background-color: ${THEME.cardBg};
                     border: 1px solid ${THEME.border};
@@ -240,41 +299,58 @@ export default function VideoGallery() {
                     transform: scale(1.1);
                     border-color: ${THEME.brandColor};
                 }
-                .vg-cat-badge {
-                    position: absolute;
-                    top: 12px;
-                    left: 12px;
-                    background: rgba(0,0,0,0.65);
-                    backdrop-filter: blur(6px);
-                    border-radius: 6px;
-                    padding: 4px 10px;
-                    color: ${THEME.textMuted};
-                    font-size: 10px;
-                    font-weight: 700;
-                    letter-spacing: 0.08em;
-                    text-transform: uppercase;
-                    font-family: Inter, sans-serif;
-                }
                 .vg-card-footer {
                     padding: 16px 20px;
                 }
                 .vg-card-title {
                     color: ${THEME.text};
                     font-family: Inter, sans-serif;
-                    font-size: 17px;
-                    font-weight: 700;
-                    line-height: 22px;
-                    margin: 0 0 4px;
-                    white-space: nowrap;
+                    font-size: 15px;
+                    font-weight: 600;
+                    line-height: 20px;
+                    margin: 0;
+                    display: -webkit-box;
+                    -webkit-line-clamp: 2;
+                    -webkit-box-orient: vertical;
                     overflow: hidden;
                     text-overflow: ellipsis;
                 }
-                .vg-card-sub {
+                
+                /* Back Navigation */
+                .vg-back-nav {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    margin-bottom: 32px;
+                }
+                .vg-back-btn {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    background: transparent;
+                    border: 1px solid ${THEME.border};
                     color: ${THEME.textMuted};
-                    font-size: 13px;
+                    padding: 8px 16px;
+                    border-radius: 8px;
                     font-family: Inter, sans-serif;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                .vg-back-btn:hover {
+                    color: ${THEME.text};
+                    border-color: ${THEME.brandColor};
+                    background: rgba(115,95,244,0.1);
+                }
+                .vg-current-cat {
+                    color: ${THEME.text};
+                    font-family: Inter, sans-serif;
+                    font-size: 20px;
+                    font-weight: 700;
                     margin: 0;
                 }
+
                 /* CTA Banner */
                 .vg-cta {
                     margin-top: 72px;
@@ -412,7 +488,7 @@ export default function VideoGallery() {
                             <p className="vg-caption-text">Our Work</p>
                         </div>
                         <h2 className="vg-heading">
-                            See Why Brands Choose Canvas BD
+                            See Why Brands Choose Canvas Digital
                         </h2>
                         <p className="vg-subtext">
                             Real client videos that drive views, build brands, and close sales.
@@ -440,42 +516,95 @@ export default function VideoGallery() {
 
                     {!loading && (
                         <>
-                            {/* Tabs */}
-                            <div data-animate data-animate-delay="100" className="vg-tabs">
-                                {CATEGORIES.map(cat => {
-                                    const count = cat === 'All' ? videos.length : videos.filter(v => v.category === cat).length;
-                                    return (
-                                        <button key={cat} onClick={() => setActiveTab(cat)}
-                                            className={`vg-tab ${activeTab === cat ? 'active' : ''}`}>
-                                            {cat}
-                                            <span className="vg-tab-count">{count}</span>
-                                        </button>
-                                    );
-                                })}
-                            </div>
+                            {/* Main Content Area */}
+                            <div className="w-full">
+                                {!selectedCategory ? (
+                                    /* Category Folders View */
+                                    <div data-animate data-animate-delay="100" className="vg-grid">
+                                        {categories.map(cat => {
+                                            const catVideos = videos.filter(v => v.category === cat.name);
+                                            const count = catVideos.length;
+                                            // Get the first video's thumbnail to use as folder cover, or a fallback
+                                            const coverThumb = count > 0 ? getThumb(catVideos[0].youtube_id) : 'https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&q=80&w=800';
 
-                            {/* Grid */}
-                            <div data-animate data-animate-delay="200" className="vg-grid">
-                                {filtered.map((video) => (
-                                    <div key={video.id} className="vg-card" onClick={() => setSelectedVideo(video)}>
-                                        <div className="vg-thumb">
-                                            <img src={getThumb(video.youtube_id)} alt={video.title} loading="lazy" />
-                                            <div className="vg-thumb-overlay" />
-                                            <div className="vg-play-btn">
-                                                <div className="vg-play-circle">
-                                                    <svg viewBox="0 0 24 24" fill="white" width="22" height="22">
-                                                        <path d="M8 5v14l11-7z" />
-                                                    </svg>
+                                            return (
+                                                <div key={cat.id} className="vg-folder" onClick={() => setSelectedCategory(cat.name)}>
+                                                    <div className="vg-folder-cover">
+                                                        {coverThumb ? (
+                                                            <img src={coverThumb} alt={cat.name} loading="lazy" />
+                                                        ) : (
+                                                            count > 0 && catVideos[0].youtube_url && catVideos[0].youtube_id ? (
+                                                                <iframe
+                                                                    src={`https://drive.google.com/file/d/${catVideos[0].youtube_id}/preview`}
+                                                                    className="w-full h-full border-0 pointer-events-none"
+                                                                    title={`${cat.name} Folder Preview`}
+                                                                />
+                                                            ) : (
+                                                                <div className="w-full h-full flex flex-col items-center justify-center bg-[#1b1b25] text-slate-500">
+                                                                    <Video size={48} className="mb-2 opacity-50" />
+                                                                    <span className="text-xs font-medium uppercase tracking-wider">Drive Video</span>
+                                                                </div>
+                                                            )
+                                                        )}
+                                                        <div className="vg-folder-overlay" />
+                                                        <div className="vg-folder-icon">
+                                                            <Folder fill="currentColor" size={24} />
+                                                        </div>
+                                                    </div>
+                                                    <div className="vg-folder-info">
+                                                        <h3 className="vg-folder-title">{cat.name}</h3>
+                                                        <p className="vg-folder-count">{count} {count === 1 ? 'Video' : 'Videos'}</p>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div className="vg-cat-badge">{video.category}</div>
-                                        </div>
-                                        <div className="vg-card-footer">
-                                            <h3 className="vg-card-title">{video.title}</h3>
-                                            <p className="vg-card-sub">Click to watch</p>
-                                        </div>
+                                            );
+                                        })}
                                     </div>
-                                ))}
+                                ) : (
+                                    /* Individual Category Video Grid View */
+                                    <div data-animate className="w-full animation-fade-in">
+                                        <div className="vg-back-nav">
+                                            <button className="vg-back-btn" onClick={() => setSelectedCategory(null)}>
+                                                <ArrowLeft size={16} /> Back to Folders
+                                            </button>
+                                            <h3 className="vg-current-cat">{selectedCategory}</h3>
+                                        </div>
+
+                                        {categoryVideos.length > 0 ? (
+                                            <div className="vg-grid">
+                                                {categoryVideos.map((video) => (
+                                                    <div key={video.id} className="vg-card" onClick={() => setSelectedVideo(video)}>
+                                                        <div className="vg-thumb bg-[#0c0c0e] flex items-center justify-center">
+                                                            {getThumb(video.youtube_id) ? (
+                                                                <img src={getThumb(video.youtube_id)} alt={video.title} loading="lazy" />
+                                                            ) : (
+                                                                <iframe
+                                                                    src={`https://drive.google.com/file/d/${video.youtube_id}/preview`}
+                                                                    className="absolute inset-0 w-full h-full border-0 pointer-events-none transition-transform duration-500 group-hover:scale-105"
+                                                                    title={video.title}
+                                                                />
+                                                            )}
+                                                            <div className="vg-thumb-overlay" />
+                                                            <div className="vg-play-btn">
+                                                                <div className="vg-play-circle">
+                                                                    <PlayCircle fill="currentColor" color="white" size={24} />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div className="vg-card-footer">
+                                                            <h3 className="vg-card-title">{video.title}</h3>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        ) : (
+                                            <div className="text-center py-20 border border-dashed border-[#302c4f] rounded-2xl bg-[#1b1b25]">
+                                                <Folder size={48} className="mx-auto mb-4 text-[#a5a7be] opacity-50" />
+                                                <h3 className="text-xl font-bold text-white mb-2">Folder is Empty</h3>
+                                                <p className="text-[#a5a7be]">There are no videos in this category yet.</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
                             </div>
 
                             {/* CTA Banner */}
@@ -511,12 +640,21 @@ export default function VideoGallery() {
                             </button>
                         </div>
                         <div className="vg-iframe-wrap">
-                            <iframe
-                                src={`https://www.youtube.com/embed/${selectedVideo.youtube_id}?autoplay=1&rel=0&modestbranding=1`}
-                                title={selectedVideo.title}
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowFullScreen
-                            />
+                            {selectedVideo?.youtube_id && selectedVideo.youtube_id.length === 11 ? (
+                                <iframe
+                                    src={`https://www.youtube.com/embed/${selectedVideo.youtube_id}?autoplay=1&rel=0&modestbranding=1`}
+                                    title={selectedVideo.title}
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowFullScreen
+                                />
+                            ) : (
+                                <iframe
+                                    src={`https://drive.google.com/file/d/${selectedVideo?.youtube_id}/preview`}
+                                    title={selectedVideo?.title}
+                                    allow="autoplay"
+                                    allowFullScreen
+                                />
+                            )}
                         </div>
                         <div className="vg-modal-cta">
                             <p className="vg-modal-cta-text">

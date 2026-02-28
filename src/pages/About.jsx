@@ -51,17 +51,6 @@ export default function About() {
                             </div>
                         </div>
                         <div className="feature-card-grid-wrap feature-card-grid-one-wrap">
-                            {/* Pallabi Office */}
-                            <div className="feature-card-three" style={{ opacity: 1 }}>
-                                <div className="feature-card-content-wrap">
-                                    <div className="feature-card-title-wrap">
-                                        <h3 className="feature-card-title">{companyDetails.locations.pallabi.name}</h3>
-                                    </div>
-                                    <div className="feature-card-text-wrap">
-                                        <p className="feature-card-text">{companyDetails.locations.pallabi.address}</p>
-                                    </div>
-                                </div>
-                            </div>
 
                             {/* Uttara Office */}
                             <div className="feature-card-three" style={{ opacity: 1 }}>

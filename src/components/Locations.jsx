@@ -10,17 +10,7 @@ export default function Locations() {
                     <p className="text-lg text-gray-600">We have multiple locations to serve you better.</p>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-8">
-                    {/* Pallabi Office */}
-                    <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                        <div className="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center mb-6">
-                            <MapPin size={24} />
-                        </div>
-                        <h3 className="text-xl font-bold text-gray-900 mb-4">{companyDetails.locations.pallabi.name}</h3>
-                        <p className="text-gray-600 mb-6 leading-relaxed">
-                            {companyDetails.locations.pallabi.address}
-                        </p>
-                    </div>
+                <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
 
                     {/* Uttara Office */}
                     <div className="bg-white p-8 rounded-2xl shadow-sm border border-gray-100 hover:shadow-md transition-shadow">

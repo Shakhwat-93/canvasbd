@@ -6,9 +6,9 @@ import { useEffect, useRef, useCallback } from 'react';
  */
 export function useScrollReveal(options = {}) {
     const {
-        threshold = 0.15,
-        rootMargin = '0px 0px -50px 0px',
-        staggerDelay = 120,
+        threshold = 0.05,
+        rootMargin = '0px 0px 100px 0px',
+        staggerDelay = 50,
     } = options;
 
     const containerRef = useRef(null);
@@ -42,8 +42,8 @@ export function useScrollReveal(options = {}) {
         elements.forEach((el, index) => {
             // Set initial state
             el.style.opacity = '0';
-            el.style.transform = 'translate3d(0, 30px, 0)';
-            el.style.transition = `opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s, transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s`;
+            el.style.transform = 'translate3d(0, 20px, 0)';
+            el.style.transition = `opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s, transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) 0s`;
 
             // Auto-stagger if parent has data-stagger
             if (el.closest('[data-stagger]') && !el.dataset.animateDelay) {
@@ -70,8 +70,8 @@ export function useRevealRef(delay = 0) {
         if (!el) return;
 
         el.style.opacity = '0';
-        el.style.transform = 'translate3d(0, 30px, 0)';
-        el.style.transition = `opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}ms, transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}ms`;
+        el.style.transform = 'translate3d(0, 20px, 0)';
+        el.style.transition = `opacity 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}ms, transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) ${delay}ms`;
 
         const observer = new IntersectionObserver(
             ([entry]) => {
@@ -81,7 +81,7 @@ export function useRevealRef(delay = 0) {
                     observer.unobserve(el);
                 }
             },
-            { threshold: 0.15, rootMargin: '0px 0px -50px 0px' }
+            { threshold: 0.05, rootMargin: '0px 0px 100px 0px' }
         );
 
         observer.observe(el);

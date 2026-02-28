@@ -57,99 +57,75 @@ export default function Footer() {
                         </div>
                     </div>
 
-                    <div className="flex flex-col gap-12 w-full">
-                        {/* Links Grid */}
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-10 md:gap-12 w-full">
-                            <div data-animate className="flex flex-col items-start w-full bg-[#16161a] border border-white/5 rounded-3xl p-8 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                <div className="mb-6">
-                                    <div className="text-sm font-bold text-[#b052ff] uppercase tracking-widest">Contact Info</div>
+                    <div className="pt-8 w-full">
+                        <div className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-8 items-start">
+                            {/* Brand Column */}
+                            <div data-animate data-animate-delay="100" className="md:col-span-3 flex flex-col gap-6">
+                                <Link to="/" className="inline-block -ml-4 md:-ml-6 lg:-ml-8">
+                                    <img src="/images/br/logo.png" alt="Canvas Bd Logo" className="object-contain h-20 md:h-28 lg:h-32 w-auto" />
+                                </Link>
+                                <div className="text-xs sm:text-sm text-slate-400 font-medium tracking-wide max-w-[200px] leading-relaxed">
+                                    Premium Video Production & Digital Marketing Agency
                                 </div>
-                                <div className="flex flex-col items-start gap-5">
+                            </div>
+
+                            {/* Contact Column */}
+                            <div data-animate data-animate-delay="200" className="md:col-span-3">
+                                <div className="text-[11px] font-bold text-[#b052ff] uppercase tracking-[0.2em] mb-6 opacity-60">Contact</div>
+                                <div className="flex flex-col gap-4">
                                     {companyData && (
                                         <>
-                                            <a href={`tel:${companyData.phone[0]}`} className="footer-link flex items-center gap-4 text-slate-300 hover:text-white transition-colors group">
-                                                <div className="p-2.5 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors">
-                                                    <Phone size={15} className="text-[#b052ff]" />
-                                                </div>
-                                                <span className="font-light">{companyData.phone[0]}</span>
+                                            <a href={`tel:${companyData.phone[0]}`} className="text-slate-400 hover:text-white transition-colors text-sm font-light flex items-center gap-3 group">
+                                                <Phone size={13} className="text-[#b052ff] opacity-50 group-hover:opacity-100" />
+                                                {companyData.phone[0]}
                                             </a>
-                                            {companyData.phone[1] && <a href={`tel:${companyData.phone[1]}`} className="footer-link flex items-center gap-4 text-slate-300 hover:text-white transition-colors group">
-                                                <div className="p-2.5 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors">
-                                                    <Phone size={15} className="text-[#b052ff]" />
-                                                </div>
-                                                <span className="font-light">{companyData.phone[1]}</span>
-                                            </a>}
-                                            <a href={`mailto:${companyData.email}`} className="footer-link flex items-center gap-4 text-slate-300 hover:text-white transition-colors break-all group">
-                                                <div className="p-2.5 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors">
-                                                    <Mail size={15} className="text-[#b052ff]" />
-                                                </div>
-                                                <span className="font-light">{companyData.email}</span>
+                                            <a href={`mailto:${companyData.email}`} className="text-slate-400 hover:text-white transition-colors text-sm font-light flex items-center gap-3 break-all group">
+                                                <Mail size={13} className="text-[#b052ff] opacity-50 group-hover:opacity-100" />
+                                                <span className="uppercase">{companyData.email}</span>
                                             </a>
                                         </>
                                     )}
                                 </div>
                             </div>
-                            <div data-animate data-animate-delay="100" className="flex flex-col items-start w-full bg-[#16161a] border border-white/5 rounded-3xl p-8 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                <div className="mb-6">
-                                    <div className="text-sm font-bold text-[#b052ff] uppercase tracking-widest">Offices</div>
-                                </div>
-                                <div className="flex flex-col items-start gap-6">
-                                    {companyData?.locations?.pallabi && (
-                                        <div className="footer-link flex items-start gap-4 group">
-                                            <div className="p-2.5 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors shrink-0 mt-0.5">
-                                                <MapPin size={16} className="text-[#b052ff]" />
-                                            </div>
-                                            <div className="flex flex-col text-left">
-                                                <span className="text-white font-semibold mb-1 text-base">{companyData.locations.pallabi.name}</span>
-                                                <span className="text-sm text-slate-400 font-light leading-relaxed max-w-[280px]">{companyData.locations.pallabi.address}</span>
-                                            </div>
-                                        </div>
-                                    )}
+
+                            {/* Offices Column */}
+                            <div data-animate data-animate-delay="300" className="md:col-span-3">
+                                <div className="text-[11px] font-bold text-[#b052ff] uppercase tracking-[0.2em] mb-6 opacity-60">Offices</div>
+                                <div className="flex flex-col gap-6">
                                     {companyData?.locations?.uttara && (
-                                        <div className="footer-link flex items-start gap-4 group mt-2">
-                                            <div className="p-2.5 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors shrink-0 mt-0.5">
-                                                <MapPin size={16} className="text-[#b052ff]" />
-                                            </div>
-                                            <div className="flex flex-col text-left">
-                                                <span className="text-white font-semibold mb-1 text-base">{companyData.locations.uttara.name}</span>
-                                                <span className="text-sm text-slate-400 font-light leading-relaxed max-w-[280px]">{companyData.locations.uttara.address}</span>
-                                            </div>
+                                        <div className="flex flex-col gap-1.5">
+                                            <span className="text-slate-200 text-xs font-semibold">{companyData.locations.uttara.name}</span>
+                                            <span className="text-[12px] text-slate-400 font-light leading-relaxed">{companyData.locations.uttara.address}</span>
                                         </div>
                                     )}
                                 </div>
                             </div>
-                            <div data-animate data-animate-delay="200" className="flex flex-col items-start w-full bg-[#16161a] border border-white/5 rounded-3xl p-8 shadow-[0_15px_20px_rgba(0,0,0,0.2)]">
-                                <div className="mb-6">
-                                    <div className="text-sm font-bold text-[#b052ff] uppercase tracking-widest">Factory</div>
-                                </div>
-                                <div className="flex flex-col items-start gap-6">
-                                    {companyData?.locations?.factory && (
-                                        <div className="footer-link flex items-start gap-4 group">
-                                            <div className="p-2.5 rounded-full bg-white/5 group-hover:bg-white/10 transition-colors shrink-0 mt-0.5">
-                                                <Building2 size={16} className="text-[#b052ff]" />
-                                            </div>
-                                            <div className="flex flex-col text-left">
-                                                <span className="text-white font-semibold mb-1 text-base">{companyData.locations.factory.name}</span>
-                                                <span className="text-sm text-slate-400 font-light leading-relaxed max-w-[280px]">{companyData.locations.factory.address}</span>
-                                            </div>
-                                        </div>
-                                    )}
-                                </div>
+
+                            {/* Factory Column */}
+                            <div data-animate data-animate-delay="400" className="md:col-span-3">
+                                <div className="text-[11px] font-bold text-[#b052ff] uppercase tracking-[0.2em] mb-6 opacity-60">Factory</div>
+                                {companyData?.locations?.factory && (
+                                    <div className="flex flex-col gap-1.5">
+                                        <span className="text-slate-200 text-xs font-semibold">{companyData.locations.factory.name}</span>
+                                        <span className="text-[12px] text-slate-400 font-light leading-relaxed">{companyData.locations.factory.address}</span>
+                                    </div>
+                                )}
                             </div>
                         </div>
 
-                        <div data-animate data-animate-delay="300" className="w-full h-px bg-white/5 my-2"></div>
+                        <div data-animate data-animate-delay="500" className="w-full h-px bg-white/5 mt-16 mb-8"></div>
 
-                        <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-8 md:gap-0 w-full mb-4 md:mb-8 pb-4">
-                            <div data-animate data-animate-delay="400" className="mb-4 md:mb-0">
-                                <Link to="/" className="flex items-center justify-start">
-                                    <img src="/images/br/logo.png" alt="Canvas Bd Logo" className="object-contain h-24 sm:h-28 md:h-32 w-auto" />
-                                </Link>
+                        <div data-animate data-animate-delay="600" className="flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-left">
+                            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-4 text-[12px] text-slate-500 font-medium">
+                                <div>© {new Date().getFullYear()} {companyData?.name || 'Canvas Bd'}. All rights reserved.</div>
+                                <div className="hidden md:block opacity-20 text-slate-400">|</div>
+                                <div>
+                                    Built by <a href="https://shakhwatrasel.vercel.app" target="_blank" rel="noopener noreferrer" className="text-slate-400 hover:text-[#b052ff] transition-colors font-semibold">Shakhwat Hossain Rasel</a>
+                                </div>
                             </div>
-                            <div data-animate data-animate-delay="500" className="flex flex-col md:flex-row items-start md:items-center justify-start md:justify-end gap-3 md:gap-4 text-left md:text-right w-full md:w-auto mt-4 md:mt-0 pr-16 md:pr-0">
-                                <div className="text-sm text-slate-300 font-medium">© {new Date().getFullYear()} {companyData?.name || 'Canvas Bd'}. All rights reserved.</div>
-                                <div className="hidden md:block text-slate-600">|</div>
-                                <div className="text-xs sm:text-sm text-slate-400 font-medium tracking-wide">Premium Video Production & Digital Marketing</div>
+                            <div className="flex gap-6 text-[11px] text-slate-500 font-bold uppercase tracking-widest">
+                                <Link to="/privacy" className="hover:text-white transition-colors">Privacy Policy</Link>
+                                <Link to="/terms" className="hover:text-white transition-colors">Terms of Service</Link>
                             </div>
                         </div>
                     </div>

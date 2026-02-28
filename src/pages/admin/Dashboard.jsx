@@ -63,7 +63,7 @@ export default function Dashboard() {
                         <h1 className="text-3xl font-serif font-bold text-white tracking-tight mb-1 flex items-center gap-3">
                             Hi, Boss! <span className="text-3xl">👋</span>
                         </h1>
-                        <p className="text-[14px] text-slate-400 mt-1">Here is the latest intelligence for Canvas BD.</p>
+                        <p className="text-[14px] text-slate-400 mt-1">Here is the latest intelligence for Canvas Digital.</p>
                     </div>
                     <div className="flex items-center gap-4">
                         <button className="flex items-center justify-center bg-[#16161a] border border-white/5 hover:border-white/10 w-11 h-11 rounded-xl text-slate-400 hover:text-white transition-all">

@@ -1,37 +1,88 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { Plus, Trash2, Video, X, Loader2 } from 'lucide-react';
+import { Plus, Trash2, Video, X, Loader2, FolderPlus } from 'lucide-react';
 
-const CATEGORIES = ['Agency Ads', 'Commercial ADS', 'Fashion', 'Recent Work', 'Social Media Ads'];
-
-function extractYouTubeId(url) {
+function extractVideoId(url) {
     if (!url) return null;
-    const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
+
+    // Check for YouTube
+    const ytRegExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=|shorts\/)([^#&?]*).*/;
+    const ytMatch = url.match(ytRegExp);
+    if (ytMatch && ytMatch[2].length === 11) {
+        return ytMatch[2];
+    }
+
+    // Check for Google Drive URL variations
+    const driveRegExp = /\/file\/d\/([a-zA-Z0-9_-]+)/;
+    const driveMatch = url.match(driveRegExp);
+    if (driveMatch && driveMatch[1]) {
+        return driveMatch[1];
+    }
+
+    // Also check for Drive folder/open URLs with id=
+    const driveIdMatch = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    if (driveIdMatch && driveIdMatch[1]) {
+        return driveIdMatch[1];
+    }
+
+    return null;
+}
+
+function getThumbnailUrl(id) {
+    if (!id) return null;
+    if (id.length === 11) {
+        return `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+    }
+    // Return null for Drive to render a placeholder instead of breaking
+    return null;
 }
 
 export default function VideosManager() {
     const [videos, setVideos] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [activeTab, setActiveTab] = useState(CATEGORIES[0]);
+    const [activeTab, setActiveTab] = useState('');
     const [saving, setSaving] = useState(false);
     const [form, setForm] = useState({ title: '', youtube_url: '' });
     const [showForm, setShowForm] = useState(false);
     const [previewId, setPreviewId] = useState(null);
     const [modalConfig, setModalConfig] = useState(null);
 
+    // New Category Form State
+    const [newCatName, setNewCatName] = useState('');
+    const [isAddingCat, setIsAddingCat] = useState(false);
+    const [savingCat, setSavingCat] = useState(false);
+
+    // Edit Category State
+    const [editingCatId, setEditingCatId] = useState(null);
+    const [editingCatName, setEditingCatName] = useState('');
+    const [savingEditCat, setSavingEditCat] = useState(false);
+
     useEffect(() => {
-        fetchVideos();
+        fetchData();
     }, []);
 
-    async function fetchVideos() {
+    async function fetchData() {
         setLoading(true);
-        const { data } = await supabase
+        // Fetch Categories
+        const { data: catData } = await supabase
+            .from('video_categories')
+            .select('*')
+            .order('sort_order', { ascending: true });
+
+        const formattedCats = catData || [];
+        setCategories(formattedCats);
+        if (formattedCats.length > 0 && !activeTab) {
+            setActiveTab(formattedCats[0].name);
+        }
+
+        // Fetch Videos
+        const { data: videoData } = await supabase
             .from('demo_videos')
             .select('*')
             .order('sort_order', { ascending: true });
-        setVideos(data || []);
+
+        setVideos(videoData || []);
         setLoading(false);
     }
 
@@ -46,13 +97,13 @@ export default function VideosManager() {
             });
             return;
         }
-        const youtube_id = extractYouTubeId(form.youtube_url);
+        const youtube_id = extractVideoId(form.youtube_url);
         if (!youtube_id) {
             setModalConfig({
                 isOpen: true,
                 type: 'error',
                 title: 'Invalid URL',
-                message: 'Invalid YouTube URL. Please paste a valid YouTube link.'
+                message: 'Invalid URL. Please paste a valid YouTube or Google Drive link.'
             });
             return;
         }
@@ -75,9 +126,121 @@ export default function VideosManager() {
         else {
             setForm({ title: '', youtube_url: '' });
             setShowForm(false);
-            fetchVideos();
+            fetchData();
         }
         setSaving(false);
+    }
+
+    // --- Category Management ---
+    async function handleAddCat(e) {
+        e.preventDefault();
+        const trimmed = newCatName.trim();
+        if (!trimmed) return;
+        setSavingCat(true);
+
+        const { error } = await supabase.from('video_categories').insert([{
+            name: trimmed,
+            sort_order: categories.length
+        }]);
+
+        if (error) {
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Error Adding Category',
+                message: error.message
+            });
+        } else {
+            setNewCatName('');
+            setIsAddingCat(false);
+            setActiveTab(trimmed);
+            fetchData();
+        }
+        setSavingCat(false);
+    }
+
+    async function handleEditCat(e, id, oldName) {
+        e.preventDefault();
+        const trimmed = editingCatName.trim();
+        if (!trimmed || trimmed === oldName) {
+            setEditingCatId(null);
+            return;
+        }
+        setSavingEditCat(true);
+
+        try {
+            // 1. Update the category table
+            const { error: catError } = await supabase
+                .from('video_categories')
+                .update({ name: trimmed })
+                .eq('id', id);
+
+            if (catError) throw catError;
+
+            // 2. Update all associated videos with the new category name
+            const { error: videoError } = await supabase
+                .from('demo_videos')
+                .update({ category: trimmed })
+                .eq('category', oldName);
+
+            if (videoError) throw videoError;
+
+            // Update UI perfectly
+            setEditingCatId(null);
+            if (activeTab === oldName) {
+                setActiveTab(trimmed);
+            }
+            fetchData();
+        } catch (error) {
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Error Renaming Category',
+                message: error.message
+            });
+        } finally {
+            setSavingEditCat(false);
+        }
+    }
+
+    const triggerDeleteCatModal = (id, name) => {
+        const catVideos = videos.filter(v => v.category === name);
+        if (catVideos.length > 0) {
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Cannot Delete Category',
+                message: `This category contains ${catVideos.length} video(s). Please delete all videos inside it before deleting the category.`
+            });
+            return;
+        }
+
+        setModalConfig({
+            isOpen: true,
+            type: 'confirm',
+            title: `Delete Category "${name}"?`,
+            message: 'Are you sure you want to delete this category?',
+            onConfirm: () => confirmDeleteCat(id)
+        });
+    };
+
+    async function confirmDeleteCat(id) {
+        setModalConfig(null);
+        const { error } = await supabase.from('video_categories').delete().eq('id', id);
+        if (!error) {
+            const newCats = categories.filter(c => c.id !== id);
+            setCategories(newCats);
+            if (activeTab === categories.find(c => c.id === id)?.name) {
+                setActiveTab(newCats.length > 0 ? newCats[0].name : '');
+            }
+        } else {
+            setModalConfig({
+                isOpen: true,
+                type: 'error',
+                title: 'Deletion Failed',
+                message: error.message
+            });
+        }
     }
 
     const triggerDeleteModal = (id) => {
@@ -149,17 +312,17 @@ export default function VideosManager() {
                                 />
                             </div>
                             <div className="md:col-span-2">
-                                <label className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">YouTube URL</label>
+                                <label className="block text-xs font-semibold text-slate-400 mb-2 uppercase tracking-wider">Video URL (Drive / YT)</label>
                                 <div className="flex gap-3">
                                     <input
                                         type="url"
                                         value={form.youtube_url}
                                         onChange={e => {
                                             setForm({ ...form, youtube_url: e.target.value });
-                                            setPreviewId(extractYouTubeId(e.target.value));
+                                            setPreviewId(extractVideoId(e.target.value));
                                         }}
                                         className="flex-1 bg-[#0c0c0e] border border-white/10 rounded-xl px-4 py-3 text-white text-sm focus:outline-none focus:border-[#b052ff]/60 focus:ring-1 focus:ring-[#b052ff]/40 transition-all placeholder:text-slate-600"
-                                        placeholder="https://www.youtube.com/watch?v=..."
+                                        placeholder="https://drive.google.com/file/... or YouTube link"
                                     />
                                     <button
                                         type="submit"
@@ -173,12 +336,22 @@ export default function VideosManager() {
                             </div>
                             {previewId && (
                                 <div className="md:col-span-3">
-                                    <p className="text-xs text-emerald-400 mb-2 font-medium">✓ Valid YouTube URL detected — Preview:</p>
-                                    <img
-                                        src={`https://img.youtube.com/vi/${previewId}/mqdefault.jpg`}
-                                        alt="Thumbnail preview"
-                                        className="h-28 rounded-xl border border-white/10 object-cover"
-                                    />
+                                    <p className="text-xs text-emerald-400 mb-2 font-medium">✓ Valid video URL detected — Preview:</p>
+                                    {getThumbnailUrl(previewId) ? (
+                                        <img
+                                            src={getThumbnailUrl(previewId)}
+                                            alt="Thumbnail preview"
+                                            className="h-32 rounded-xl border border-white/10 object-cover"
+                                        />
+                                    ) : (
+                                        <div className="h-32 w-56 rounded-xl border border-white/10 overflow-hidden relative bg-[#1b1b25]">
+                                            <iframe
+                                                src={`https://drive.google.com/file/d/${previewId}/preview`}
+                                                className="w-full h-full border-0 pointer-events-none"
+                                                title="Drive Preview"
+                                            />
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </form>
@@ -186,22 +359,101 @@ export default function VideosManager() {
                 )}
 
                 {/* Category Tabs */}
-                <div className="flex gap-2 mb-8 flex-wrap">
-                    {CATEGORIES.map(cat => (
+                <div className="flex gap-2 mb-8 flex-wrap items-center">
+                    {categories.map(cat => {
+                        const isEditing = editingCatId === cat.id;
+
+                        if (isEditing) {
+                            return (
+                                <form key={`edit-${cat.id}`} onSubmit={(e) => handleEditCat(e, cat.id, cat.name)} className="flex items-center gap-2 bg-[#2c1d38] border border-[#b052ff]/60 rounded-xl p-1 shadow-[0_0_15px_rgba(176,82,255,0.2)]">
+                                    <input
+                                        type="text"
+                                        autoFocus
+                                        value={editingCatName}
+                                        onChange={(e) => setEditingCatName(e.target.value)}
+                                        className="bg-transparent border-none outline-none text-white text-sm px-3 py-1 w-32 focus:ring-0"
+                                    />
+                                    <button type="submit" disabled={!editingCatName.trim() || savingEditCat} className="bg-[#b052ff] hover:bg-[#c073ff] text-white p-1.5 rounded-lg disabled:opacity-50 transition-colors">
+                                        {savingEditCat ? <Loader2 size={14} className="animate-spin" /> : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>}
+                                    </button>
+                                    <button type="button" onClick={() => setEditingCatId(null)} className="text-slate-400 hover:text-white p-1 transition-colors">
+                                        <X size={16} />
+                                    </button>
+                                </form>
+                            );
+                        }
+
+                        return (
+                            <div key={cat.id} className="relative group/cat flex items-center">
+                                <button
+                                    onClick={() => setActiveTab(cat.name)}
+                                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${activeTab === cat.name
+                                        ? 'bg-gradient-to-r from-[#2c1d38] to-[#1d1026] text-white border border-[#b052ff]/40 shadow-[0_0_12px_rgba(176,82,255,0.15)] pr-14'
+                                        : 'bg-[#16161a] text-slate-400 hover:text-white border border-white/5 hover:border-white/10 pr-4'
+                                        }`}
+                                >
+                                    {cat.name}
+                                    <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-md ${activeTab === cat.name ? 'bg-[#b052ff]/20 text-[#d89fff]' : 'bg-white/5 text-slate-500'}`}>
+                                        {videos.filter(v => v.category === cat.name).length}
+                                    </span>
+                                </button>
+
+                                {/* Action Buttons (Show on active tab) */}
+                                {activeTab === cat.name && (
+                                    <div className="absolute right-1 flex items-center gap-0.5">
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                setEditingCatId(cat.id);
+                                                setEditingCatName(cat.name);
+                                            }}
+                                            className="text-slate-400 hover:text-[#b052ff] transition-colors p-1"
+                                            title="Rename Category"
+                                        >
+                                            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"></path><path d="m15 5 4 4"></path></svg>
+                                        </button>
+                                        <button
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                triggerDeleteCatModal(cat.id, cat.name);
+                                            }}
+                                            className="text-red-400/60 hover:text-red-400 transition-colors p-1"
+                                            title="Delete Category"
+                                        >
+                                            <X size={14} />
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
+
+                    {/* Add Category Trigger */}
+                    {!isAddingCat ? (
                         <button
-                            key={cat}
-                            onClick={() => setActiveTab(cat)}
-                            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all ${activeTab === cat
-                                ? 'bg-gradient-to-r from-[#2c1d38] to-[#1d1026] text-white border border-[#b052ff]/40 shadow-[0_0_12px_rgba(176,82,255,0.15)]'
-                                : 'bg-[#16161a] text-slate-400 hover:text-white border border-white/5 hover:border-white/10'
-                                }`}
+                            onClick={() => setIsAddingCat(true)}
+                            className="px-4 py-2 rounded-xl text-sm font-medium transition-all bg-[#0c0c0e]/50 border border-dashed border-white/20 text-slate-400 hover:text-white hover:border-[#b052ff]/50 flex items-center gap-2"
                         >
-                            {cat}
-                            <span className={`ml-2 text-xs px-1.5 py-0.5 rounded-md ${activeTab === cat ? 'bg-[#b052ff]/20 text-[#d89fff]' : 'bg-white/5 text-slate-500'}`}>
-                                {videos.filter(v => v.category === cat).length}
-                            </span>
+                            <FolderPlus size={16} /> Add Category
                         </button>
-                    ))}
+                    ) : (
+                        <form onSubmit={handleAddCat} className="flex items-center gap-2 bg-[#16161a] border border-[#b052ff]/40 rounded-xl p-1 shadow-[0_0_10px_rgba(176,82,255,0.1)]">
+                            <input
+                                type="text"
+                                autoFocus
+                                value={newCatName}
+                                onChange={(e) => setNewCatName(e.target.value)}
+                                placeholder="New Category..."
+                                className="bg-transparent border-none outline-none text-white text-sm px-3 py-1 w-32 focus:ring-0 placeholder:text-slate-600"
+                            />
+                            <button type="submit" disabled={!newCatName.trim() || savingCat} className="bg-[#b052ff] hover:bg-[#c073ff] text-white p-1.5 rounded-lg disabled:opacity-50 transition-colors">
+                                {savingCat ? <Loader2 size={14} className="animate-spin" /> : <Plus size={14} />}
+                            </button>
+                            <button type="button" onClick={() => setIsAddingCat(false)} className="text-slate-400 hover:text-white p-1 transition-colors">
+                                <X size={16} />
+                            </button>
+                        </form>
+                    )}
                 </div>
 
                 {/* Video Grid */}
@@ -219,15 +471,23 @@ export default function VideosManager() {
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                         {categoryVideos.map(video => (
                             <div key={video.id} className="group bg-[#16161a] border border-white/5 rounded-3xl overflow-hidden hover:border-white/10 transition-all hover:-translate-y-1 duration-300">
-                                <div className="relative overflow-hidden aspect-video">
-                                    <img
-                                        src={`https://img.youtube.com/vi/${video.youtube_id}/mqdefault.jpg`}
-                                        alt={video.title}
-                                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                                        loading="lazy"
-                                    />
+                                <div className="relative overflow-hidden aspect-video bg-[#0c0c0e] flex items-center justify-center">
+                                    {getThumbnailUrl(video.youtube_id) ? (
+                                        <img
+                                            src={getThumbnailUrl(video.youtube_id)}
+                                            alt={video.title}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                            loading="lazy"
+                                        />
+                                    ) : (
+                                        <iframe
+                                            src={`https://drive.google.com/file/d/${video.youtube_id}/preview`}
+                                            className="w-full h-full border-0 pointer-events-none group-hover:scale-105 transition-transform duration-500"
+                                            title={video.title}
+                                        />
+                                    )}
                                     {/* Play Overlay */}
-                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                                         <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
                                             <svg viewBox="0 0 24 24" fill="white" className="w-5 h-5 ml-1"><path d="M8 5v14l11-7z" /></svg>
                                         </div>

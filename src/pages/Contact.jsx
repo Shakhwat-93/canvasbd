@@ -78,7 +78,6 @@ export default function Contact() {
     }, []);
 
     // Provide default fallbacks if companyData is not yet loaded
-    const locationPallabi = companyData?.locations?.pallabi || { name: 'Pallabi Office', address: 'Loading...' };
     const locationUttara = companyData?.locations?.uttara || { name: 'Uttara Office', address: 'Loading...' };
     const locationFactory = companyData?.locations?.factory || { name: 'Factory', address: 'Loading...' };
     const contactEmail = companyData?.email || 'CANVASBAGBD@GMAIL.COM';
@@ -186,8 +185,7 @@ export default function Contact() {
                                     </svg>
                                 </div>
                                 <div className="contact-card-content">
-                                    <h3 className="contact-card-title">Phone Numbers</h3>
-                                    <a href="tel:01626777744" className="contact-card-link">01626777744</a>
+                                    <h3 className="contact-card-title">Phone Number</h3>
                                     <a href="tel:01990081308" className="contact-card-link">01990-081308</a>
                                 </div>
                             </div>
@@ -236,21 +234,10 @@ export default function Contact() {
                         </div>
 
                         <div className="contact-locations-grid">
-                            {/* Pallabi Office */}
-                            <div data-animate data-animate-delay="100" className="contact-location-card">
-                                <div className="contact-location-badge">Office</div>
-                                <div className="contact-location-icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                        <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                                        <circle cx="12" cy="10" r="3" />
-                                    </svg>
-                                </div>
-                                <h3 className="contact-location-name">{locationPallabi.name}</h3>
-                                <p className="contact-location-address">{locationPallabi.address}</p>
-                            </div>
+
 
                             {/* Uttara Office */}
-                            <div data-animate data-animate-delay="250" className="contact-location-card">
+                            <div data-animate data-animate-delay="100" className="contact-location-card">
                                 <div className="contact-location-badge">Office</div>
                                 <div className="contact-location-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
@@ -263,7 +250,7 @@ export default function Contact() {
                             </div>
 
                             {/* Keraniganj Factory */}
-                            <div data-animate data-animate-delay="400" className="contact-location-card">
+                            <div data-animate data-animate-delay="200" className="contact-location-card">
                                 <div className="contact-location-badge factory-badge">Factory</div>
                                 <div className="contact-location-icon factory-icon">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
